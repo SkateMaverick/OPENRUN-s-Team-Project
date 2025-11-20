@@ -1,0 +1,7 @@
+newmtl GridOrange_01_Mat
+bump Grid_01_Normal.png
+map_Ke Grid_01_Emissive.png
+map_Kd Grid_02_BaseMap.png
+Kd 1 0.5985916 0
+d 1
+
