@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 01dba1f3bc33e4b4fa301d2180819576
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Shaders/ASE/Functions/MainBending
+    - NHP.asset
+  uploadId: 763345

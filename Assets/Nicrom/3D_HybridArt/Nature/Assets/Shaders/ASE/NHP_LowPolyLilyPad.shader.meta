@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 83e6ea01592290a47a01db8a9af2efd8
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Shaders/ASE/NHP_LowPolyLilyPad.shader
+  uploadId: 763345

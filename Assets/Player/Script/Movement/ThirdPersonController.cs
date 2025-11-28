@@ -45,6 +45,8 @@ namespace Player.Script
 
         private void Move()
         {
+            if (_playerInput == null || _mainCameraTransform == null) return;
+
             float h = _playerInput.MoveInput.x;
             float v = _playerInput.MoveInput.y;
             
@@ -53,6 +55,14 @@ namespace Player.Script
 
             _lastMoveDirection = cameraRotation * inputVector;
             
+            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out RaycastHit hitInfo, groundedRadius + 0.2f, groundLayers, QueryTriggerInteraction.Ignore))
+            {
+                if (grounded)
+                {
+                    _lastMoveDirection = Vector3.ProjectOnPlane(_lastMoveDirection, hitInfo.normal).normalized;
+                }
+            }
+
             Quaternion targetRotation = Quaternion.Euler(0, _mainCameraTransform.eulerAngles.y, 0);
             transform.rotation = targetRotation;
             
@@ -78,7 +88,7 @@ namespace Player.Script
             {
                 if (currentVelocity < 0.0f)
                 {
-                    currentVelocity = -2f;
+                    currentVelocity = -10f;
                 }
             }
             else

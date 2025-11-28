@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 69f44ab96179bbd40842cc845cd65032
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Shaders/ASE/NHP_StylisedFlowerWithoutStem.shader
+  uploadId: 763345

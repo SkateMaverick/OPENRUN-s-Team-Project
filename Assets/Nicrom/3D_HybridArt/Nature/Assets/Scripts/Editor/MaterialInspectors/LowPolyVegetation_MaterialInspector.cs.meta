@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: e7574b1f9365f1945944ef7f0d928112
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Scripts/Editor/MaterialInspectors/LowPolyVegetation_MaterialInspector.cs
+  uploadId: 763345
