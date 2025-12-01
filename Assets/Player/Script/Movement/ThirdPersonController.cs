@@ -5,34 +5,30 @@ namespace Player.Script
 {
     public class ThirdPersonController : MonoBehaviour
     {
-        #region Movement Variables
         public float moveSpeed = 4.0f;
         private Vector3 _lastMoveDirection;
-        #endregion
 
-        #region Gravity Variables
         public float gravity = -30f;
         public float currentVelocity;
         public float maxFallSpeed = 53.0f;
-        #endregion
 
-        #region Ground Variables
+        [Header("Ground Settings")]
         public bool grounded = true;
-        public float groundedOffset = 0.1f;
-        public float groundedRadius = 0.2f;
         public LayerMask groundLayers;
-        #endregion
 
-        #region Player Variables
         private CharacterController _controller;
         private Transform _mainCameraTransform;
         private HandlePlayerInput _playerInput;
-        #endregion
 
         private void Start()
         {
             _controller = GetComponent<CharacterController>();
-            _mainCameraTransform = Camera.main.transform;
+            
+            if (Camera.main != null)
+            {
+                _mainCameraTransform = Camera.main.transform;
+            }
+
             _playerInput = GetComponent<HandlePlayerInput>();
         }
 
@@ -55,7 +51,7 @@ namespace Player.Script
 
             _lastMoveDirection = cameraRotation * inputVector;
             
-            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out RaycastHit hitInfo, groundedRadius + 0.2f, groundLayers, QueryTriggerInteraction.Ignore))
+            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out RaycastHit hitInfo, 1.0f, groundLayers, QueryTriggerInteraction.Ignore))
             {
                 if (grounded)
                 {
@@ -102,20 +98,10 @@ namespace Player.Script
         
         private void GroundedCheck()
         {
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + groundedOffset,
-                transform.position.z);
-                
-            grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
-        }
-        
-        private void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y + groundedOffset,
-                transform.position.z);
-
-            Gizmos.DrawWireSphere(spherePosition, groundedRadius);
+            if (_controller != null)
+            {
+                grounded = _controller.isGrounded;
+            }
         }
     }
 }
