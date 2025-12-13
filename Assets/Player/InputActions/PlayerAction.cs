@@ -198,6 +198,17 @@ namespace Player.InputActions
                 },
                 {
                     ""name"": """",
+                    ""id"": ""7cd0ec9f-2f90-46fd-a4e5-e18aabf4201b"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MOBILE"",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""6783c927-d0dc-4043-805b-c84cd4c89156"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
