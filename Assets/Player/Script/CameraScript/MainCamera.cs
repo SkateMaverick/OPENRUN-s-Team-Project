@@ -110,12 +110,12 @@ namespace Player.Script.CameraScript
         private void TryFindPlayer()
         {
             GameObject player = GameObject.FindGameObjectWithTag("Player");
-
+            
             if (player != null)
             {
                 _playerInput = player.GetComponent<HandlePlayerInput>();
                 _bowState = player.GetComponent<BowAimState>();
-
+            
                 if (defaultTarget == null)
                     defaultTarget = player.transform.Find("CameraRoot");
             }

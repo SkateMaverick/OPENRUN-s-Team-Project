@@ -68,6 +68,6 @@ public class BulletFire : MonoBehaviour
 
     void DrawDebugRay(Vector3 startPos, Vector3 endPos)
     {
-        Debug.DrawLine(startPos, endPos, Color.yellow);
+        //Debug.DrawLine(startPos, endPos, Color.yellow);
     }
 }
