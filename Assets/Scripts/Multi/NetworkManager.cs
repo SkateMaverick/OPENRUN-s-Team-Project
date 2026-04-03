@@ -5,9 +5,10 @@ using Enums;
 using Player.InputActions;
 using Player.Script.CameraScript;
 
+//
 public class NetworkManager : MonoBehaviour
 {
-    // Resources 파일에 담겨있는 동그란 캐릭터 프리팹 (포톤으로 프리팹을 인스턴스할 때는 Resources 파일에 담긴 프리팹만 가능합니다.)
+    // Resources 파일에 담겨있는 동그란 캐릭터 프리팹 (포톤으로 프리팹을 인스턴스할 때는 Resources 파일에 담긴 프리팹만 가능)
     [SerializeField] private GameObject sphereGolem;
     // Resources 파일에 담겨있는 동그란 캐릭터 프리팹
     [SerializeField] private GameObject boxGolem;
@@ -16,17 +17,9 @@ public class NetworkManager : MonoBehaviour
     // 사각형 캐릭터 기본 스폰 위치
     [SerializeField] private Transform boxDefaultPosition;
 
-    // 강제로 연결
-    public NetworkMainCamera cam;
-
-    private void Awake()
-    {
-        SpawnCharacter();
-    }
-
     private void Start()
     {
-        
+        SpawnCharacter();
     }
 
     private void SpawnCharacter()
@@ -66,11 +59,21 @@ public class NetworkManager : MonoBehaviour
                 }
             }
             
-            // test 변수는 필요없음 강제로 연결용
-            GameObject test = PhotonNetwork.Instantiate(myCharacter.name, spawnPosition, Quaternion.identity);
-            
-            // 강제로 연결
-            cam.defaultTarget = test.transform;
+            // 플레이어를 생성하고 담음
+            GameObject spawnedPlayer = PhotonNetwork.Instantiate(myCharacter.name, spawnPosition, Quaternion.identity);
+
+            // 씬에 있는 MainCamera 스크립트를 찾음
+            NetworkMainCamera mainCam = FindObjectOfType<NetworkMainCamera>();
+
+            // 카메라가 대상으로 지정할 타겟으로 할당
+            if (mainCam != null)
+            {
+                mainCam.SetTarget(spawnedPlayer);
+            }
+            else
+            {
+                print("씬에 MainCamera 스크립트가 붙은 오브젝트가 없습니다.");
+            }
         }
     }
 }

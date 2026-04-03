@@ -97,12 +97,6 @@ namespace Player.InputActions
             SprintInput = context.ReadValue<float>() > 0.5f;
         }
 
-        private void LateUpdate()
-        {
-            JumpInput = false;
-        }
-
-        #region 모바일 처리 (Update가 여기에 들어가있습니다)
         private void Update()
         {
             if (!photonView.IsMine)
@@ -116,6 +110,13 @@ namespace Player.InputActions
                 HandleMobileLook();
             }
         }
+        
+        private void LateUpdate()
+        {
+            JumpInput = false;
+        }
+
+        #region 모바일 처리
 
         // 모바일에서 UI가 아닌 빈 곳을 터치했을 때는 드래그로 화면을 회전시킴
         private void HandleMobileLook()
