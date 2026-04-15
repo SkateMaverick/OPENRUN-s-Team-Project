@@ -42,18 +42,34 @@ public class InventoryUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         Refresh();
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void Toggle()
     {
-        gameObject.SetActive(!gameObject.activeSelf);
+        bool isOpen = !gameObject.activeSelf;
+        gameObject.SetActive(isOpen);
 
-        if (gameObject.activeSelf)
+        if (isOpen)
+        {
             Refresh();
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 }

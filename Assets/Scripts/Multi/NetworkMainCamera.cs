@@ -23,37 +23,37 @@ namespace Player.Script.CameraScript
         public float cameraCollisionRadius = 0.2f;
         public LayerMask collisionLayers;
 
-        // 외부에서 주입받을 변수들
         private NetworkPlayerInput _playerInput;
         private NetworkBowAimState _bowState;
 
         private float _currentYaw = 0f;
         private float _currentPitch = 0f;
 
-        // ★ 핵심: NetworkManager가 이 함수를 호출해서 플레이어를 꽂아줍니다.
         public void SetTarget(GameObject player)
         {
             _playerInput = player.GetComponent<NetworkPlayerInput>();
             _bowState = player.GetComponent<NetworkBowAimState>();
 
-            // CameraRoot 찾기
             defaultTarget = player.transform.Find("CameraRoot");
-            if (defaultTarget == null) defaultTarget = player.transform; // 없으면 그냥 플레이어 자체를 봄
+            if (defaultTarget == null) defaultTarget = player.transform;
 
-            // 커서 잠금 (게임 시작)
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
         private void LateUpdate()
         {
-            // 플레이어가 아직 할당 안 됐으면 아무것도 안 함 (대기)
             if (_playerInput == null || defaultTarget == null) return;
 
-            Vector2 lookInput = _playerInput.LookInput;
-            _currentYaw += lookInput.x * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
-            _currentPitch -= lookInput.y * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
-            _currentPitch = Mathf.Clamp(_currentPitch, bottomClamp, topClamp);
+            bool isUsingCursor = Cursor.visible || Cursor.lockState == CursorLockMode.None;
+
+            if (!isUsingCursor)
+            {
+                Vector2 lookInput = _playerInput.LookInput;
+                _currentYaw += lookInput.x * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
+                _currentPitch -= lookInput.y * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
+                _currentPitch = Mathf.Clamp(_currentPitch, bottomClamp, topClamp);
+            }
 
             Quaternion cameraRotation = Quaternion.Euler(_currentPitch, _currentYaw, 0f);
             Vector3 camDir = cameraRotation * Vector3.back;
@@ -68,10 +68,6 @@ namespace Player.Script.CameraScript
                 if (_bowState.aimRoot != null) aimRoot = _bowState.aimRoot;
                 lerpVal = _bowState.CurrentLerp;
             }
-            else
-            {
-                if (defaultTarget == null) normalRoot = transform;
-            }
 
             Vector3 posNormal = normalRoot.position + (camDir * defaultDistance);
             Vector3 posAim = aimRoot.position + (camDir * aimDistance);
@@ -82,7 +78,14 @@ namespace Player.Script.CameraScript
             Vector3 dirToCamera = (idealPos - currentPivot).normalized;
             float distToCamera = Vector3.Distance(currentPivot, idealPos);
 
-            RaycastHit[] hits = Physics.SphereCastAll(currentPivot, cameraCollisionRadius, dirToCamera, distToCamera, collisionLayers);
+            RaycastHit[] hits = Physics.SphereCastAll(
+                currentPivot,
+                cameraCollisionRadius,
+                dirToCamera,
+                distToCamera,
+                collisionLayers
+            );
+
             float nearestHitDistance = distToCamera;
             bool foundWall = false;
 
@@ -107,7 +110,7 @@ namespace Player.Script.CameraScript
             transform.position = finalPos;
             transform.rotation = cameraRotation;
 
-            if (_bowState != null)
+            if (_bowState != null && !isUsingCursor)
             {
                 _bowState.RotateBow(_currentPitch);
             }
