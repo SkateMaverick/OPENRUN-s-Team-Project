@@ -282,6 +282,8 @@ GameObject:
   - component: {fileID: 6910820268700174549}
   - component: {fileID: 5658267688449744079}
   - component: {fileID: 4567311259268793808}
+  - component: {fileID: -2594477227647806701}
+  - component: {fileID: 303505915575202717}
   m_Layer: 0
   m_Name: SpherePlayer
   m_TagString: Player
@@ -461,3 +463,29 @@ MonoBehaviour:
   range: 100
   maxAimDistance: 100
   convergenceDistance: 5
+--- !u!114 &-2594477227647806701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196477896717847488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07df4063a613954fa0bfea54d5c34be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+--- !u!114 &303505915575202717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9196477896717847488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8adbd29f86f45142acc2de5c7b9bf5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimPoint: {fileID: 0}
