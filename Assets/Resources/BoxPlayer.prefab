@@ -284,13 +284,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
-  gravity: -30
-  currentVelocity: 0
-  maxFallSpeed: 53
   grounded: 1
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 0
+  groundCheckDistance: 0.2
 --- !u!114 &-225001175277607808
 MonoBehaviour:
   m_ObjectHideFlags: 0

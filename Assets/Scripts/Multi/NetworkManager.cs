@@ -4,10 +4,14 @@ using UnityEngine;
 using Enums;
 using Player.InputActions;
 using Player.Script.CameraScript;
+using UnityEngine.UI;
 
 //
 public class NetworkManager : MonoBehaviour
 {
+    // 지금은 크기조절 슬라이더와 직접연관 관계를 만들어서 구현하지만, 추후 UIManager 같은걸로 대체
+    public Slider scaleSlider;
+    
     // Resources 파일에 담겨있는 동그란 캐릭터 프리팹 (포톤으로 프리팹을 인스턴스할 때는 Resources 파일에 담긴 프리팹만 가능)
     [SerializeField] private GameObject sphereGolem;
     // Resources 파일에 담겨있는 동그란 캐릭터 프리팹
@@ -59,9 +63,11 @@ public class NetworkManager : MonoBehaviour
                 }
             }
             
-            // 플레이어를 생성하고 담음
             GameObject spawnedPlayer = PhotonNetwork.Instantiate(myCharacter.name, spawnPosition, Quaternion.identity);
 
+            #region 동적 할당이 필요한 요소들
+            // 1. 카메라 할당
+            // 플레이어를 생성하고 담음
             // 씬에 있는 MainCamera 스크립트를 찾음
             NetworkMainCamera mainCam = FindObjectOfType<NetworkMainCamera>();
 
@@ -74,6 +80,13 @@ public class NetworkManager : MonoBehaviour
             {
                 print("씬에 MainCamera 스크립트가 붙은 오브젝트가 없습니다.");
             }
+            
+            // 2. BoxGolem 프리팹에 있는 ScaleChange 스크립트를 scaleSlider의 유니티 이벤트에 할당
+            if ((CharacterType)characterType == CharacterType.BoxGolem)
+            {
+                scaleSlider.onValueChanged.AddListener(spawnedPlayer.GetComponent<NetworkScaleChange>().OnSliderValueChanged);
+            }
+            #endregion
         }
     }
 }

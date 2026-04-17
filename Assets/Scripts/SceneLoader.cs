@@ -10,7 +10,7 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadLobby()
     {
-        Debug.Log("LoadLobby »£√‚µ ");
+        Debug.Log("LoadLobby Ìò∏Ï∂úÎê®");
         SceneManager.LoadScene("Lobby");
     }
 
@@ -26,7 +26,7 @@ public class SceneLoader : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("∞‘¿” ¡æ∑· Ω««‡");
+        Debug.Log("Í≤åÏûÑ Ï¢ÖÎ£å Ïã§Ìñâ");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

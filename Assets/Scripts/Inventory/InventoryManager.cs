@@ -83,7 +83,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         onInventoryChanged?.Invoke();
-        Debug.Log("ÀÎº¥Åä¸®°¡ °¡µæ Ã¡½À´Ï´Ù.");
+        Debug.Log("ì¸ë²¤í† ë¦¬ê°€ ê°€ë“ ì°¼ìŠµë‹ˆë‹¤.");
         return false;
     }
 }

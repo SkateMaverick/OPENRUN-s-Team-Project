@@ -4,17 +4,21 @@ using Photon.Pun;
 
 namespace Player.Script
 {
-    public class NetworkPlayerMovement : MonoBehaviourPun
+    public class LegacyNetworkPlayerMovement : MonoBehaviourPun
     {
         public float moveSpeed = 4.0f;
         private Vector3 _lastMoveDirection;
+
+        public float gravity = -30f;
+        public float currentVelocity;
+        public float maxFallSpeed = 53.0f;
 
         [Header("Ground Settings")]
         public bool grounded = true;
         public float groundCheckDistance = 0.2f;
 
         private Rigidbody _rb;
-        private Collider _col;
+        private BoxCollider _boxCol; // Capsule 대신 BoxCollider로 수정
         private Transform _mainCameraTransform;
         private NetworkPlayerInput _playerInput;
 
@@ -26,11 +30,10 @@ namespace Player.Script
         private void Start()
         {
             _rb = GetComponent<Rigidbody>();
-            _col = GetComponent<Collider>(); 
+            _boxCol = GetComponent<BoxCollider>(); // 컴포넌트 할당 수정
 
-            // 물리 엔진 회전 제어 및 자체 중력 활성화
             _rb.freezeRotation = true;
-            _rb.useGravity = true; 
+            _rb.useGravity = false;
 
             if (Camera.main != null)
             {
@@ -43,15 +46,14 @@ namespace Player.Script
         private void Update()
         {
             if (!photonView.IsMine) return;
-        
-            // 이동 및 카메라 입력값 캐싱
+
             if (_playerInput != null)
             {
                 _inputH = _playerInput.MoveInput.x;
                 _inputV = _playerInput.MoveInput.y;
                 _isSprinting = _playerInput.SprintInput && !_playerInput.AimInput;
             }
-        
+
             if (_mainCameraTransform != null)
             {
                 _camEulerY = _mainCameraTransform.eulerAngles.y;
@@ -63,19 +65,18 @@ namespace Player.Script
             if (!photonView.IsMine) return;
 
             GroundedCheck();
+            Gravity();
             Move();
         }
 
-        // 추후 확인 필요
         private void Move()
         {
             Vector3 inputVector = new Vector3(_inputH, 0f, _inputV).normalized;
             Quaternion cameraRotation = Quaternion.Euler(0, _camEulerY, 0);
 
             _lastMoveDirection = cameraRotation * inputVector;
-    
-            // 경사면 이동 방향 보정
-            if (GetGroundHit(_col.bounds.center, Vector3.down, _col.bounds.extents.y + 1.0f, out RaycastHit hitInfo))
+            
+            if (GetGroundHit(_rb.position + Vector3.up * 0.1f, Vector3.down, 1.0f, out RaycastHit hitInfo))
             {
                 if (grounded)
                 {
@@ -89,21 +90,42 @@ namespace Player.Script
             {
                 finalHorizontalSpeed = _isSprinting ? moveSpeed * 2.0f : moveSpeed;
             }
-    
-            // 수평 이동 벡터 계산
-            Vector3 finalVelocity = _lastMoveDirection * finalHorizontalSpeed;
-    
-            _rb.linearVelocity = new Vector3(finalVelocity.x, _rb.linearVelocity.y, finalVelocity.z);
-
+            
+            Vector3 finalVelocity = (_lastMoveDirection * finalHorizontalSpeed) + (Vector3.up * currentVelocity);
+            Vector3 nextPosition = _rb.position + (finalVelocity * Time.fixedDeltaTime);
+            
             Quaternion targetRotation = Quaternion.Euler(0, _camEulerY, 0);
-            _rb.MoveRotation(targetRotation);
+
+            _rb.Move(nextPosition, targetRotation);
         }
 
+        private void Gravity()
+        {
+            if (grounded)
+            {
+                if (currentVelocity < 0.0f)
+                {
+                    currentVelocity = -10f; 
+                }
+            }
+            else
+            {
+                if (currentVelocity > -maxFallSpeed)
+                {
+                    currentVelocity += gravity * Time.fixedDeltaTime;
+                }
+            }
+        }
+        
         private void GroundedCheck()
         {
-            // 콜라이더 중앙을 기준으로 바닥 체크 수행
-            Vector3 origin = _col.bounds.center;
-            float distance = _col.bounds.extents.y + groundCheckDistance;
+            if (_boxCol == null) return;
+
+            // BoxCollider의 크기를 기반으로 검사 시작점과 범위를 설정합니다.
+            Vector3 origin = _boxCol.bounds.center;
+            // 박스의 절반 높이(extents.y)에 추가 거리를 더해 검사 거리를 설정합니다.
+            float distance = _boxCol.bounds.extents.y + groundCheckDistance;
+            
             grounded = GetGroundHit(origin, Vector3.down, distance, out _);
         }
 
@@ -113,11 +135,15 @@ namespace Player.Script
             bool hitFound = false;
             float minDistance = maxDist;
 
-            RaycastHit[] hits = Physics.RaycastAll(origin, dir, maxDist, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+            // BoxCollider의 가로(x), 세로(z) 크기보다 아주 미세하게 작은 직육면체(Box) 볼륨을 만듭니다.
+            // 0.95f를 곱하는 이유는 박스 벽면과 마찰로 인한 오작동을 방지하기 위함입니다.
+            Vector3 boxHalfExtents = new Vector3(_boxCol.bounds.extents.x * 0.95f, 0.05f, _boxCol.bounds.extents.z * 0.95f);
+            
+            // SphereCast 대신 BoxCast를 사용하여 박스 형태의 범위로 바닥 충돌 검사
+            RaycastHit[] hits = Physics.BoxCastAll(origin, boxHalfExtents, dir, transform.rotation, maxDist, Physics.AllLayers, QueryTriggerInteraction.Ignore);
             
             foreach (RaycastHit hit in hits)
             {
-                // 플레이어 자신(루트 오브젝트)과의 충돌 무시
                 if (hit.transform.root == transform.root) continue;
 
                 if (hit.distance < minDistance)

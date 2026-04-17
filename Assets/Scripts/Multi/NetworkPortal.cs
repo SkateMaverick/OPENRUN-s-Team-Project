@@ -10,7 +10,7 @@ public class NetworkPortal : MonoBehaviourPun
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.LoadLevel("Dungeon");
+                PhotonNetwork.LoadLevel("Dungeon 1");
             }
         }
     }
