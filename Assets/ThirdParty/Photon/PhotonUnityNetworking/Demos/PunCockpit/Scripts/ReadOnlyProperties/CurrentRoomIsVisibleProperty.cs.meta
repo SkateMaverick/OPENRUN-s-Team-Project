@@ -15,5 +15,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/PunCockpit/Scripts/ReadOnlyProperties/CurrentRoomIsVisibleProperty.cs
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/PunCockpit/Scripts/ReadOnlyProperties/CurrentRoomIsVisibleProperty.cs
   uploadId: 817708

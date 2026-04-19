@@ -15,5 +15,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonRealtime/Demos/DemoLoadBalancing/ConnectAndJoinRandomLb.cs
+  assetPath: Assets/ThirdParty/Photon/PhotonRealtime/Demos/DemoLoadBalancing/ConnectAndJoinRandomLb.cs
   uploadId: 817708

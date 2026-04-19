@@ -94,6 +94,6 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/DemoSlotRacer/Kenney Assets/Stylized
-    city/Models/tree_1.FBX
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/DemoSlotRacer/Kenney
+    Assets/Stylized city/Models/tree_1.FBX
   uploadId: 817708

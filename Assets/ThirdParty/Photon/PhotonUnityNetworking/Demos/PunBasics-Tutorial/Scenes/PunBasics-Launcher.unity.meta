@@ -7,5 +7,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Scenes/PunBasics-Launcher.unity
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Scenes/PunBasics-Launcher.unity
   uploadId: 817708

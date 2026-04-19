@@ -79,5 +79,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Models/LaserBolt.fbx
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Models/LaserBolt.fbx
   uploadId: 817708

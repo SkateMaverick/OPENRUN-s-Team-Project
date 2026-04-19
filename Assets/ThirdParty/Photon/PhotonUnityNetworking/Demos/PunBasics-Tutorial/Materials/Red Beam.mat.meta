@@ -7,6 +7,6 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Materials/Red
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/PunBasics-Tutorial/Materials/Red
     Beam.mat
   uploadId: 817708

@@ -187,6 +187,8 @@ GameObject:
   - component: {fileID: -3563848248796133039}
   - component: {fileID: -225001175277607808}
   - component: {fileID: -7326734103758588394}
+  - component: {fileID: 3534713205048552338}
+  - component: {fileID: -2666222292228965978}
   m_Layer: 0
   m_Name: BoxPlayer
   m_TagString: Player
@@ -284,8 +286,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 4
+  gravity: -30
+  currentVelocity: 0
+  maxFallSpeed: 53
   grounded: 1
-  groundCheckDistance: 0.2
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &-225001175277607808
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,3 +322,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pushPower: 200
+--- !u!114 &3534713205048552338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4908086710432209451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8adbd29f86f45142acc2de5c7b9bf5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimPoint: {fileID: 0}
+--- !u!114 &-2666222292228965978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4908086710432209451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07df4063a613954fa0bfea54d5c34be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100

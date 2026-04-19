@@ -19,5 +19,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Code/PhotonView.cs
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Code/PhotonView.cs
   uploadId: 817708

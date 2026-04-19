@@ -11,5 +11,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonChat/Code/ChatState.cs
+  assetPath: Assets/ThirdParty/Photon/PhotonChat/Code/ChatState.cs
   uploadId: 817708

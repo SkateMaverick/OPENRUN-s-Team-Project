@@ -41,5 +41,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonLibs/Photon3Unity3D.dll
+  assetPath: Assets/ThirdParty/Photon/PhotonLibs/Photon3Unity3D.dll
   uploadId: 817708

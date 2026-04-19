@@ -7,5 +7,6 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonChat/Demos/Demo Chat/Resources/OpenSans/Apache License.txt
+  assetPath: Assets/ThirdParty/Photon/PhotonChat/Demos/Demo Chat/Resources/OpenSans/Apache
+    License.txt
   uploadId: 817708

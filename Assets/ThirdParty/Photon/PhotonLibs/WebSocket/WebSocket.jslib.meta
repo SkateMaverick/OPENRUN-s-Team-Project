@@ -35,5 +35,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonLibs/WebSocket/WebSocket.jslib
+  assetPath: Assets/ThirdParty/Photon/PhotonLibs/WebSocket/WebSocket.jslib
   uploadId: 817708

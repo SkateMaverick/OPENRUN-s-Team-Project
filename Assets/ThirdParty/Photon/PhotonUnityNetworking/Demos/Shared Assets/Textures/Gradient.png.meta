@@ -48,5 +48,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Demos/Shared Assets/Textures/Gradient.png
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Demos/Shared Assets/Textures/Gradient.png
   uploadId: 817708

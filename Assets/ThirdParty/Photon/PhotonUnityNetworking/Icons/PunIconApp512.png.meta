@@ -91,5 +91,5 @@ AssetOrigin:
   productId: 119922
   packageName: PUN 2 - FREE
   packageVersion: 2.52
-  assetPath: Assets/Photon/PhotonUnityNetworking/Icons/PunIconApp512.png
+  assetPath: Assets/ThirdParty/Photon/PhotonUnityNetworking/Icons/PunIconApp512.png
   uploadId: 817708
