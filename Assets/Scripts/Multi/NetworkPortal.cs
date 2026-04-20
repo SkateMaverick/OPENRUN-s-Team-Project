@@ -3,14 +3,15 @@ using Photon.Pun;
 
 public class NetworkPortal : MonoBehaviourPun
 {
+    [SerializeField] private string sceneName;
+    
     private void OnTriggerEnter(Collider other)
     {
-        print("포탈이동");
         if (other.gameObject.CompareTag("Player"))
         {
             if (PhotonNetwork.IsMasterClient)
             {
-                PhotonNetwork.LoadLevel("Dungeon 1");
+                PhotonNetwork.LoadLevel(sceneName);
             }
         }
     }
