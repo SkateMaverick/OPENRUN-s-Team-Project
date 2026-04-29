@@ -69,6 +69,10 @@ PrefabInstance:
       value: Noa
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -100,6 +104,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4527208370725478759}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8790355155552234742}
   m_SourcePrefab: {fileID: 100100000, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
 --- !u!137 &2135295524334045484 stripped
 SkinnedMeshRenderer:
@@ -254,3 +261,17 @@ MonoBehaviour:
   skinnedMeshRenderer: {fileID: 2135295524334045484}
   targetLengthSize: {x: 2, y: 4.608961, z: 4.17}
   targetWidthSize: {x: 5.98, y: 4.608961, z: 1.5}
+--- !u!114 &8790355155552234742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089157110108270340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07df4063a613954fa0bfea54d5c34be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1000000
+  isDead: 0

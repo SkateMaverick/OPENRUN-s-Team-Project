@@ -23,6 +23,10 @@ public class EnemyTurretController : MonoBehaviourPun
 
     [Header("Line Of Sight")]
     [SerializeField] private LayerMask obstacleMask;
+    
+    // AI가 수정
+    [Header("Weapon")]
+    [SerializeField] private TurretWeapon turretWeapon;
 
     private TurretTargetable _currentTarget;
     private float _lastSearchTime;
@@ -140,6 +144,16 @@ public class EnemyTurretController : MonoBehaviourPun
         return true;
     }
 
+    // AI가 수정
+    // private void Fire(Vector3 direction, float distance)
+    // {
+    //     if (turretWeapon != null)
+    //     {
+    //         turretWeapon.Fire(direction);
+    //     }
+    // }
+    
+    // 원본
     private void Fire(Vector3 direction, float distance)
     {
         // 가장 단순하고 안정적인 방식: 히트스캔

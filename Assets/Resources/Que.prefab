@@ -162,6 +162,10 @@ PrefabInstance:
       value: Que
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -202,6 +206,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6811569065045175633}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6149188167807389790}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4934466555230298132}
   m_SourcePrefab: {fileID: 100100000, guid: 211e0763c264cd24e98b32c24d37b009, type: 3}
 --- !u!4 &7245576068346001881 stripped
 Transform:
@@ -363,3 +373,30 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.283024, y: 3.756455, z: 2.371611}
   m_Center: {x: 0.1510475, y: 1.871979, z: -0.005204454}
+--- !u!114 &6149188167807389790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054307121223033699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8adbd29f86f45142acc2de5c7b9bf5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimPoint: {fileID: 7245576068346001881}
+--- !u!114 &4934466555230298132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8054307121223033699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07df4063a613954fa0bfea54d5c34be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1000000
+  isDead: 0

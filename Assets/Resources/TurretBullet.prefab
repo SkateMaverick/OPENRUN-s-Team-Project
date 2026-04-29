@@ -12,12 +12,10 @@ GameObject:
   - component: {fileID: 10979507779704532}
   - component: {fileID: 2081442287256820450}
   - component: {fileID: 4646049380559853990}
-  - component: {fileID: -371067990248222393}
-  - component: {fileID: -7967907612497597425}
   - component: {fileID: 4975565094600730858}
-  - component: {fileID: -6967250176555195528}
+  - component: {fileID: 5964937305128706014}
   m_Layer: 9
-  m_Name: Bullet
+  m_Name: TurretBullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -112,46 +110,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5000003
   m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &-371067990248222393
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9145571476482935156}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &-7967907612497597425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9145571476482935156}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae63992250fa14b4880d2eaa2ed0652e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletDamage: 10
 --- !u!114 &4975565094600730858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,11 +129,11 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 0
   ObservedComponents:
-  - {fileID: -6967250176555195528}
+  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &-6967250176555195528
+--- !u!114 &5964937305128706014
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -184,10 +142,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 9145571476482935156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 48593b173a52cac4d8bc2e49c004d970, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
+  speed: 20
+  damage: 10
+  lifeTime: 3

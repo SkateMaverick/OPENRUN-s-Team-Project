@@ -1,9 +1,11 @@
 using System;
+using Photon.Pun;
 using UnityEngine;
 
 // 
 public class NetworkBullet : MonoBehaviour, IBullet
 {
+    [SerializeField] private float bulletDamage = 10f;  
     private Rigidbody _rb;
 
     private void Awake()
@@ -25,6 +27,11 @@ public class NetworkBullet : MonoBehaviour, IBullet
     // 물리 충돌 시 파괴 (벽이나 적에 닿았을 때)
     private void OnTriggerEnter(Collider other)
     {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (other.TryGetComponent<IDamageable>(out var damageable)) damageable.TakeDamage(bulletDamage);
+        }
+
         Destroy(gameObject);
     }
 }

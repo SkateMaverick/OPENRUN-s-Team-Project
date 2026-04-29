@@ -17,7 +17,7 @@ public class NetworkBulletFire : MonoBehaviourPun
 
     void Update()
     {
-        //if (!photonView.IsMine) return;
+        if (!photonView.IsMine) return;
         
         UpdateAim();
 
@@ -64,7 +64,7 @@ public class NetworkBulletFire : MonoBehaviourPun
         // 총알이 날아갈 방향을 보게 회전
         Quaternion lookRotation = Quaternion.LookRotation(direction);
 
-        GameObject bulletObj = Instantiate(bulletPrefab, firePoint.position, lookRotation);
+        GameObject bulletObj = PhotonNetwork.Instantiate(bulletPrefab.name, firePoint.position, lookRotation);
         NetworkBullet bulletScript = bulletObj.GetComponent<NetworkBullet>();
 
         if (bulletScript != null)
