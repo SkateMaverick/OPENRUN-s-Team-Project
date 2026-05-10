@@ -23,28 +23,34 @@ namespace Player.Script.CameraScript
         public float cameraCollisionRadius = 0.2f;
         public LayerMask collisionLayers;
 
-        private HandlePlayerInput _playerInput;
+        private PlayerInputReader _playerInputReader;
         private BowAimState _bowState;
 
         private float _currentYaw = 0f;
         private float _currentPitch = 0f;
 
+        // 추가
+        private void Awake()
+        {
+            _playerInputReader = defaultTarget.GetComponent<PlayerInputReader>();
+        }
+        
         private void Start()
         {
-            TryFindPlayer();
+            //TryFindPlayer();
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
         private void LateUpdate()
         {
-            if (_playerInput == null)
+            if (_playerInputReader == null)
             {
-                TryFindPlayer();
+                //TryFindPlayer();
                 return;
             }
 
-            Vector2 lookInput = _playerInput.LookInput;
+            Vector2 lookInput = _playerInputReader.LookInput;
             _currentYaw += lookInput.x * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
             _currentPitch -= lookInput.y * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
             _currentPitch = Mathf.Clamp(_currentPitch, bottomClamp, topClamp);
@@ -113,7 +119,7 @@ namespace Player.Script.CameraScript
             
             if (player != null)
             {
-                _playerInput = player.GetComponent<HandlePlayerInput>();
+                _playerInputReader = player.GetComponent<PlayerInputReader>();
                 _bowState = player.GetComponent<BowAimState>();
             
                 if (defaultTarget == null)

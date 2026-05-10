@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Multi/Dungeon 2.unity
     guid: f9ddc2abe4acbf6498282f67a59b8d9b
+  - enabled: 1
+    path: Assets/SingleTest/Main.unity
+    guid: 9ae35db6c8338624cb22ddd89fcfa883
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: acc1e4eda614e2e4f99a612ab00bbd17, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b5eae6d5b2df4ff48a49eb4a4737adda, type: 3}
