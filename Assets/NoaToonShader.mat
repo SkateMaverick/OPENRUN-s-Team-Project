@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: NoaToonShader
-  m_Shader: {fileID: -6465566751694194690, guid: 662c076767f82f843a32328ab0773a74, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 05f543eca32b2844789ceb4e36b494fc, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []

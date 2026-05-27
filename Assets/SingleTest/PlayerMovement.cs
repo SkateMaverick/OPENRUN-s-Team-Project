@@ -48,11 +48,11 @@ public class PlayerMovement : MonoBehaviour, IControllable
 
     private void Move(Vector3 direction, float speed)
     {
-        // 원하는 목표 속도
-        Vector3 targetVelocity = direction * speed; 
+        // 목표 속도
+        Vector3 targetVelocity = direction * speed;
         // 현재 속도
         Vector3 currentVelocity = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
-        // 현재 속도에서 원하는 목표 속도까지의 차이 (= 원하는 목표 속도 - 현재 속도)
+        // 현재 속도에서 목표 속도까지의 차이 (= 목표 속도 - 현재 속도)
         Vector3 velocityDifference = targetVelocity - currentVelocity;
         // 차이만큼 현재 속도에 더함 (현재 속도가 5고, 목표 속도가 3이면 3-5=-2 -> 5+(-2)=3)
         _rigidbody.AddForce(velocityDifference, ForceMode.VelocityChange);

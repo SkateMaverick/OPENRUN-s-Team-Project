@@ -99,7 +99,7 @@ namespace Player.InputActions
                     ""type"": ""Value"",
                     ""id"": ""bfa65fc1-4358-494d-9d84-efaa4cafe8f3"",
                     ""expectedControlType"": """",
-                    ""processors"": ""InvertVector2(invertX=false)"",
+                    ""processors"": ""InvertVector2(invertX=false,invertY=false)"",
                     ""interactions"": """",
                     ""initialStateCheck"": true
                 },

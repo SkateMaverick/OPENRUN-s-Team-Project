@@ -43,18 +43,12 @@ public class ScaleChange : MonoBehaviour
             _changedBoxColliderSize.x = targetLengthSize.x + (value * 2 * lengthDeltaSizeX);
             _changedBoxColliderSize.y = targetLengthSize.y + (value * 2 * lengthDeltaSizeY);
             _changedBoxColliderSize.z = targetLengthSize.z + (value * 2 * lengthDeltaSizeZ);
-
-            if (_boxCollider == null)
-            {
-                print("얘 비었는디?");
-            }
-
-            print(_changedBoxColliderSize);
+            
             _boxCollider.size = _changedBoxColliderSize; // 콜라이더 사이즈를 변경된 사이즈로 변경
         }
         else
         {
-            changeValue = (value - 0.5f) * 200f;
+            changeValue = (value - 0.5f) * 200f; // 0.5~1을 0~100으로
             
             skinnedMeshRenderer.SetBlendShapeWeight(_lengthIndex, 0);
             skinnedMeshRenderer.SetBlendShapeWeight(_widthIndex, changeValue);
@@ -71,7 +65,7 @@ public class ScaleChange : MonoBehaviour
             _boxCollider.size = _changedBoxColliderSize;
         }
 
-        _currentLengthWeight = skinnedMeshRenderer.GetBlendShapeWeight(_lengthIndex);
-        _currentWidthWeight = skinnedMeshRenderer.GetBlendShapeWeight(_widthIndex);
+        //_currentLengthWeight = skinnedMeshRenderer.GetBlendShapeWeight(_lengthIndex);
+        //_currentWidthWeight = skinnedMeshRenderer.GetBlendShapeWeight(_widthIndex);
     }
 }
