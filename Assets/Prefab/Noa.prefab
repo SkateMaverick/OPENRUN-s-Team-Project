@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 157.45
+      value: 2.8
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       propertyPath: m_LocalPosition.y
@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -12.91
+      value: -4.15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       propertyPath: m_LocalRotation.w
@@ -115,7 +115,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9089157110108270340}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -161,7 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1bd421a96a57664bbf67440626c49d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  followCam: {fileID: 0}
+  baseSpeed: 8
+  sprintMultiplier: 2
+  turnInterpolationRatio: 10
+  extraGravity: 2.5
 --- !u!135 &6270591093723330120
 SphereCollider:
   m_ObjectHideFlags: 0

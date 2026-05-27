@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     private IControllable _sphereGolem; // HandleCharacterControl를 실행하기 위해
     private IControllable _boxGolem; // ..
     private IControllable _currentCharacter; // 현재 조종 캐릭터
-    private CinemachineCamera _currentVirtualCamera; // 현재 조종 캐릭터를 타겟으로 하는 버추얼 카메라
     private PlayerInputReader _playerInputReader;
     
     private void Awake()
@@ -25,7 +24,6 @@ public class PlayerController : MonoBehaviour
     
         // 처음으로 가지는 기본 캐릭터는 스피어 골렘
         _currentCharacter = _sphereGolem;
-        _currentVirtualCamera = sphereGolemVirtualCamera;
     }
     
     private void Update()
