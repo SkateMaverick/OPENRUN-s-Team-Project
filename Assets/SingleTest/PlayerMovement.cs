@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour, IControllable
 
     private void FixedUpdate()
     {
+
         // 더 강한 중력
         _rigidbody.AddForce(Physics.gravity * (extraGravity - 1f), ForceMode.Acceleration);
     }

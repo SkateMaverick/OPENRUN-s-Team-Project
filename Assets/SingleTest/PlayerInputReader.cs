@@ -17,7 +17,7 @@ namespace Player.InputActions
         public bool AimInput { get; private set; }
         public bool SprintInput { get; private set; }
 
-        private HashSet<int> _lookFingers = new HashSet<int>();
+        private readonly HashSet<int> _lookFingers = new HashSet<int>();
 
         private void Awake()
         {
@@ -61,14 +61,15 @@ namespace Player.InputActions
             _playerAction.PlayerActions.Sprint.canceled -= OnSprint;
 
             _playerAction.PlayerActions.Disable();
+            EnhancedTouchSupport.Disable();
         }
 
         private bool IsUsingCursorUI()
         {
-            return Cursor.visible || Cursor.lockState == CursorLockMode.None;
+            return UIStateManager.Instance != null && UIStateManager.Instance.IsAnyUIOpen;
         }
 
-        private void OnMove(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        private void OnMove(InputAction.CallbackContext context)
         {
             if (IsUsingCursorUI())
             {
@@ -79,7 +80,7 @@ namespace Player.InputActions
             MoveInput = context.ReadValue<Vector2>();
         }
 
-        private void OnLook(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        private void OnLook(InputAction.CallbackContext context)
         {
             if (IsUsingCursorUI())
             {
@@ -90,7 +91,7 @@ namespace Player.InputActions
             LookInput = context.ReadValue<Vector2>();
         }
 
-        private void OnJump(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        private void OnJump(InputAction.CallbackContext context)
         {
             if (IsUsingCursorUI())
             {
@@ -101,7 +102,7 @@ namespace Player.InputActions
             JumpInput = true;
         }
 
-        private void OnAim(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        private void OnAim(InputAction.CallbackContext context)
         {
             if (IsUsingCursorUI())
             {
@@ -112,7 +113,7 @@ namespace Player.InputActions
             AimInput = context.ReadValue<float>() > 0.5f;
         }
 
-        private void OnSprint(UnityEngine.InputSystem.InputAction.CallbackContext context)
+        private void OnSprint(InputAction.CallbackContext context)
         {
             if (IsUsingCursorUI())
             {
@@ -146,6 +147,7 @@ namespace Player.InputActions
         }
 
         #region 모바일 처리
+
         private void HandleMobileLook()
         {
             LookInput = Vector2.zero;
@@ -180,7 +182,8 @@ namespace Player.InputActions
 
         private bool IsPointerOverUI(ETouch touch)
         {
-            if (EventSystem.current == null) return false;
+            if (EventSystem.current == null)
+                return false;
 
             PointerEventData eventData = new PointerEventData(EventSystem.current);
             eventData.position = touch.screenPosition;
@@ -190,6 +193,7 @@ namespace Player.InputActions
 
             return results.Count > 0;
         }
+
         #endregion
     }
 }

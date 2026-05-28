@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: 516ded21cc1676b479e09e15fd928522
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - scaleSlider: {instanceID: 0}
+  - sphereGolem: {fileID: 9089157110108270340, guid: e81f778ac70956d4da02200fa83ab135, type: 3}
+  - boxGolem: {fileID: 8054307121223033699, guid: 492e6a7cd58357b4b97e4329b7f5e9ed, type: 3}
+  - sphereDefaultPosition: {instanceID: 0}
+  - boxDefaultPosition: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
