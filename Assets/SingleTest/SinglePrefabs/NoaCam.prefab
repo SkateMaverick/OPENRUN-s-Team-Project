@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4245592863719311387}
   - component: {fileID: 3962412704657245097}
   - component: {fileID: 1413073741834097132}
+  - component: {fileID: 1211913363546330335}
   - component: {fileID: 819600084678155622}
   m_Layer: 0
   m_Name: NoaCam
@@ -28,13 +29,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4805165604061121749}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40822625, y: 0.000000019916149, z: -0.000000008906195, w: 0.91288084}
-  m_LocalPosition: {x: 168.6, y: 11.615524, z: -20.596622}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0.54, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4245592863719311387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,7 +56,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 3087416471042039415, guid: a82d2f82121a5674b859207c0a2cce76, type: 3}
+    TrackingTarget: {fileID: 0}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -170,6 +171,45 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &1211913363546330335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805165604061121749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe43d662878a7c43bcd44d43c9e2094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollideAgainst:
+    serializedVersion: 2
+    m_Bits: 1
+  IgnoreTag: 
+  TransparentLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  MinimumDistanceFromTarget: 0.3
+  AvoidObstacles:
+    Enabled: 1
+    DistanceLimit: 0
+    MinimumOcclusionTime: 0
+    CameraRadius: 0.4
+    UseFollowTarget:
+      Enabled: 0
+      YOffset: 0
+    Strategy: 0
+    MaximumEffort: 4
+    SmoothingTime: 0
+    Damping: 0.4
+    DampingWhenOccluded: 0.2
+  ShotQualityEvaluation:
+    Enabled: 0
+    OptimalDistance: 10
+    NearLimit: 5
+    FarLimit: 30
+    MaxQualityBoost: 0.2
 --- !u!114 &819600084678155622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,10 +232,10 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -2836090028237203011, guid: b5eae6d5b2df4ff48a49eb4a4737adda, type: 3}
-        Gain: 5
+        Gain: 0.25
         LegacyInput: 
         LegacyGain: 1
-        CancelDeltaTime: 0
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.2
@@ -215,7 +255,7 @@ MonoBehaviour:
         DecelTime: 0.2
     - Name: Orbit Scale
       Owner: {fileID: 3962412704657245097}
-      Enabled: 1
+      Enabled: 0
       Input:
         InputAction: {fileID: -423771258819551211, guid: 1d6e640e716dc4ff6989b73d02023f2b, type: 3}
         Gain: -1

@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 7088927670325612053}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20.003963, y: 1.13234, z: -10.106902}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -57,7 +57,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f030c4dd0fbaf8641be709fe1343dabc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereGolem: {fileID: 4185959840396861223, guid: a0d522d68e5eedd42845fe743638d13c, type: 3}
-  boxGolem: {fileID: 2419387653898552525, guid: a82d2f82121a5674b859207c0a2cce76, type: 3}
-  sphereGolemVirtualCamera: {fileID: 3313588444329168766, guid: e7c260422dd3fce40bf0c8082b387814, type: 3}
-  boxGolemVirtualCamera: {fileID: 4245592863719311387, guid: 78a0e7068ce80df4ebf2e06432822ee1, type: 3}
+  sphereGolem: {fileID: 0}
+  boxGolem: {fileID: 0}
+  sphereGolemVirtualCamera: {fileID: 0}
+  boxGolemVirtualCamera: {fileID: 0}

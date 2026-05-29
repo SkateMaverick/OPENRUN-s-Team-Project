@@ -51,13 +51,6 @@ public class PlayerController : MonoBehaviour
             _playerInputReader.MoveInput,
             _playerInputReader.SprintInput
         );
-
-        Debug.Log($"MoveInput: {_playerInputReader.MoveInput}, Sprint: {_playerInputReader.SprintInput}");
-
-        _currentCharacter.HandleCharacterControl(
-            _playerInputReader.MoveInput,
-            _playerInputReader.SprintInput
-        );
     }
 
     private void SwitchToBoxGolem()
