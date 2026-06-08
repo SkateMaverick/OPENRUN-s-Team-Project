@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Aim",
+                    "name": "Shot",
                     "type": "Button",
                     "id": "42273ee9-8c71-4048-887a-f4ec9ee00ded",
                     "expectedControlType": "",
@@ -137,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
-                    "action": "Aim",
+                    "action": "Shot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

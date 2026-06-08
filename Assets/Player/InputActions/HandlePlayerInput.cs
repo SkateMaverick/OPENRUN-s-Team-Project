@@ -41,8 +41,8 @@ namespace Player.InputActions
             _playerAction.PlayerActions.Jump.started += OnJump;
 
             // Aim (Right Mouse Button)
-            _playerAction.PlayerActions.Aim.performed += OnAim;
-            _playerAction.PlayerActions.Aim.canceled += OnAim;
+            _playerAction.PlayerActions.Shot.performed += OnAim;
+            _playerAction.PlayerActions.Shot.canceled += OnAim;
 
             // Sprint (Shift)
             _playerAction.PlayerActions.Sprint.performed += OnSprint;
@@ -64,8 +64,8 @@ namespace Player.InputActions
 
             _playerAction.PlayerActions.Jump.started -= OnJump;
 
-            _playerAction.PlayerActions.Aim.performed -= OnAim;
-            _playerAction.PlayerActions.Aim.canceled -= OnAim;
+            _playerAction.PlayerActions.Shot.performed -= OnAim;
+            _playerAction.PlayerActions.Shot.canceled -= OnAim;
 
             _playerAction.PlayerActions.Sprint.performed -= OnSprint;
             _playerAction.PlayerActions.Sprint.canceled -= OnSprint;

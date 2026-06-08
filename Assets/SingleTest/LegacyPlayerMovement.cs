@@ -46,7 +46,7 @@ namespace Player.Script
             {
                 _inputH = _playerInputReader.MoveInput.x;
                 _inputV = _playerInputReader.MoveInput.y;
-                _isSprinting = _playerInputReader.SprintInput && !_playerInputReader.AimInput;
+                //_isSprinting = _playerInputReader.SprintInput && !_playerInputReader.AimInput;
             }
         
             if (_mainCameraTransform != null)

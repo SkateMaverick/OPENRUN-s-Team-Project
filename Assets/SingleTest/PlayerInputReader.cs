@@ -9,12 +9,15 @@ namespace Player.InputActions
 {
     public class PlayerInputReader : MonoBehaviour
     {
+        // 싱글톤 변수
+        public static PlayerInputReader Instance { get; private set; }
+        
         private PlayerAction _playerAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool JumpInput { get; private set; }
-        public bool AimInput { get; private set; }
+        public bool FireInput { get; private set; }
         public bool SprintInput { get; private set; }
 
         private readonly HashSet<int> _lookFingers = new HashSet<int>();
@@ -22,6 +25,17 @@ namespace Player.InputActions
         private void Awake()
         {
             _playerAction = new PlayerAction();
+            
+            #region 싱글톤
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+            #endregion
         }
 
         private void OnEnable()
@@ -34,8 +48,8 @@ namespace Player.InputActions
 
             _playerAction.PlayerActions.Jump.started += OnJump;
 
-            _playerAction.PlayerActions.Aim.performed += OnAim;
-            _playerAction.PlayerActions.Aim.canceled += OnAim;
+            _playerAction.PlayerActions.Shot.performed += OnAim;
+            _playerAction.PlayerActions.Shot.canceled += OnAim;
 
             _playerAction.PlayerActions.Sprint.performed += OnSprint;
             _playerAction.PlayerActions.Sprint.canceled += OnSprint;
@@ -54,8 +68,8 @@ namespace Player.InputActions
 
             _playerAction.PlayerActions.Jump.started -= OnJump;
 
-            _playerAction.PlayerActions.Aim.performed -= OnAim;
-            _playerAction.PlayerActions.Aim.canceled -= OnAim;
+            _playerAction.PlayerActions.Shot.performed -= OnAim;
+            _playerAction.PlayerActions.Shot.canceled -= OnAim;
 
             _playerAction.PlayerActions.Sprint.performed -= OnSprint;
             _playerAction.PlayerActions.Sprint.canceled -= OnSprint;
@@ -106,11 +120,11 @@ namespace Player.InputActions
         {
             if (IsUsingCursorUI())
             {
-                AimInput = false;
+                FireInput = false;
                 return;
             }
 
-            AimInput = context.ReadValue<float>() > 0.5f;
+            FireInput = context.ReadValue<float>() > 0.5f;
         }
 
         private void OnSprint(InputAction.CallbackContext context)
@@ -130,7 +144,7 @@ namespace Player.InputActions
             {
                 MoveInput = Vector2.zero;
                 LookInput = Vector2.zero;
-                AimInput = false;
+                FireInput = false;
                 SprintInput = false;
                 return;
             }

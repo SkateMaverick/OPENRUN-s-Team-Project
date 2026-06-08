@@ -34,8 +34,8 @@ namespace Player.InputActions
 
             _playerAction.PlayerActions.Jump.started += OnJump;
 
-            _playerAction.PlayerActions.Aim.performed += OnAim;
-            _playerAction.PlayerActions.Aim.canceled += OnAim;
+            _playerAction.PlayerActions.Shot.performed += OnAim;
+            _playerAction.PlayerActions.Shot.canceled += OnAim;
 
             _playerAction.PlayerActions.Sprint.performed += OnSprint;
             _playerAction.PlayerActions.Sprint.canceled += OnSprint;
@@ -54,8 +54,8 @@ namespace Player.InputActions
 
             _playerAction.PlayerActions.Jump.started -= OnJump;
 
-            _playerAction.PlayerActions.Aim.performed -= OnAim;
-            _playerAction.PlayerActions.Aim.canceled -= OnAim;
+            _playerAction.PlayerActions.Shot.performed -= OnAim;
+            _playerAction.PlayerActions.Shot.canceled -= OnAim;
 
             _playerAction.PlayerActions.Sprint.performed -= OnSprint;
             _playerAction.PlayerActions.Sprint.canceled -= OnSprint;

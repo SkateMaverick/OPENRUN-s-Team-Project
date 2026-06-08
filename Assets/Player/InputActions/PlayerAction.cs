@@ -131,7 +131,7 @@ namespace Player.InputActions
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Aim"",
+                    ""name"": ""Shot"",
                     ""type"": ""Button"",
                     ""id"": ""42273ee9-8c71-4048-887a-f4ec9ee00ded"",
                     ""expectedControlType"": """",
@@ -225,7 +225,7 @@ namespace Player.InputActions
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";PC"",
-                    ""action"": ""Aim"",
+                    ""action"": ""Shot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -290,7 +290,7 @@ namespace Player.InputActions
             m_PlayerActions_Move = m_PlayerActions.FindAction("Move", throwIfNotFound: true);
             m_PlayerActions_Sprint = m_PlayerActions.FindAction("Sprint", throwIfNotFound: true);
             m_PlayerActions_Jump = m_PlayerActions.FindAction("Jump", throwIfNotFound: true);
-            m_PlayerActions_Aim = m_PlayerActions.FindAction("Aim", throwIfNotFound: true);
+            m_PlayerActions_Shot = m_PlayerActions.FindAction("Shot", throwIfNotFound: true);
         }
 
         ~@PlayerAction()
@@ -375,7 +375,7 @@ namespace Player.InputActions
         private readonly InputAction m_PlayerActions_Move;
         private readonly InputAction m_PlayerActions_Sprint;
         private readonly InputAction m_PlayerActions_Jump;
-        private readonly InputAction m_PlayerActions_Aim;
+        private readonly InputAction m_PlayerActions_Shot;
         /// <summary>
         /// Provides access to input actions defined in input action map "PlayerActions".
         /// </summary>
@@ -404,9 +404,9 @@ namespace Player.InputActions
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_PlayerActions_Jump;
             /// <summary>
-            /// Provides access to the underlying input action "PlayerActions/Aim".
+            /// Provides access to the underlying input action "PlayerActions/Shot".
             /// </summary>
-            public InputAction @Aim => m_Wrapper.m_PlayerActions_Aim;
+            public InputAction @Shot => m_Wrapper.m_PlayerActions_Shot;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -445,9 +445,9 @@ namespace Player.InputActions
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Aim.started += instance.OnAim;
-                @Aim.performed += instance.OnAim;
-                @Aim.canceled += instance.OnAim;
+                @Shot.started += instance.OnShot;
+                @Shot.performed += instance.OnShot;
+                @Shot.canceled += instance.OnShot;
             }
 
             /// <summary>
@@ -471,9 +471,9 @@ namespace Player.InputActions
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
-                @Aim.started -= instance.OnAim;
-                @Aim.performed -= instance.OnAim;
-                @Aim.canceled -= instance.OnAim;
+                @Shot.started -= instance.OnShot;
+                @Shot.performed -= instance.OnShot;
+                @Shot.canceled -= instance.OnShot;
             }
 
             /// <summary>
@@ -569,12 +569,12 @@ namespace Player.InputActions
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
             /// <summary>
-            /// Method invoked when associated input action "Aim" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// Method invoked when associated input action "Shot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
             /// </summary>
             /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-            void OnAim(InputAction.CallbackContext context);
+            void OnShot(InputAction.CallbackContext context);
         }
     }
 }
