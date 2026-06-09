@@ -3,35 +3,45 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
+    public static string NextSceneName;
+
+    [Header("Scene Names")]
+    [SerializeField] private string loadingSceneName = "LoadingScene";
+    [SerializeField] private string storySceneName = "StoryScene";
+    [SerializeField] private string singleMainSceneName = "SingleTest";
+    [SerializeField] private string menuSceneName = "Menu";
+
+    public void LoadStoryScene()
+    {
+        LoadSceneWithLoading(storySceneName);
+    }
+
+    public void LoadSingleMain()
+    {
+        LoadSceneWithLoading(singleMainSceneName);
+    }
+
     public void LoadMenu()
     {
-        SceneManager.LoadScene("Menu");
+        LoadSceneWithLoading(menuSceneName);
     }
 
-    public void LoadLobby()
+    public void LoadSceneWithLoading(string targetSceneName)
     {
-        Debug.Log("LoadLobby 호출됨");
-        SceneManager.LoadScene("Lobby");
-    }
+        if (string.IsNullOrEmpty(targetSceneName))
+        {
+            Debug.LogError("이동할 씬 이름이 비어 있습니다.");
+            return;
+        }
 
-    public void LoadMain()
-    {
-        SceneManager.LoadScene("Main");
-    }
+        NextSceneName = targetSceneName;
+        Debug.Log("다음 씬 설정: " + NextSceneName);
 
-    public void LoadDungeon()
-    {
-        SceneManager.LoadScene("Dungeon");
+        SceneManager.LoadScene(loadingSceneName);
     }
 
     public void QuitGame()
     {
-        Debug.Log("게임 종료 실행");
-
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
         Application.Quit();
-#endif
     }
 }
