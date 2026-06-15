@@ -1,34 +1,42 @@
 using UnityEngine;
-using Photon.Pun;
 
 // Bullet에 맞았을 때, 파티클을 생성하고 자신 게임오브젝트를 파괴
-public class DestroyableProp : MonoBehaviourPun
+public class DestroyableProp : MonoBehaviour, IDamageable
 {
     [Header("Destroy Effect")]
     [SerializeField] private GameObject destroyParticlePrefab;
     [SerializeField] private Transform effectSpawnPoint;
 
-    private bool isDestroyed;
+    private bool _isDestroyed = false;
 
-    private void OnTriggerEnter(Collider other)
+    public void TakeDamage(int damage)
     {
-        if (isDestroyed)
-            return;
-
-        // 충돌한 콜라이더가 Bullet이면 자신을 파괴
-        if (other.TryGetComponent(out IBullet bullet))
+        if (!_isDestroyed)
         {
-            isDestroyed = true;
-            photonView.RPC(nameof(Destroyed), RpcTarget.All);
+            _isDestroyed = true;
+            SpawnDestroyParticle();
+            Destroy(gameObject);
         }
     }
 
-    [PunRPC]
-    private void Destroyed()
-    {
-        SpawnDestroyParticle();
-        Destroy(gameObject);
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (_isDestroyed)
+    //         return;
+    //     
+    //     // 충돌한 콜라이더가 투사체면 자신을 파괴
+    //     if (other.TryGetComponent(out IProjectile projectile))
+    //     {
+    //         _isDestroyed = true;
+    //         Destroyed();
+    //     }
+    // }
+    //
+    // private void Destroyed()
+    // {
+    //     SpawnDestroyParticle();
+    //     Destroy(gameObject);
+    // }
 
     private void SpawnDestroyParticle()
     {

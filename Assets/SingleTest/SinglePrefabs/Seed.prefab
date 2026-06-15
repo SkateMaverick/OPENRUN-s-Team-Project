@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   whatIsTarget:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 3072
   attackDamage: 10
 --- !u!54 &-6775764350814370223
 Rigidbody:

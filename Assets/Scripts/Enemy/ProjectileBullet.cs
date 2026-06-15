@@ -4,7 +4,7 @@ using Photon.Pun;
 public class ProjectileBullet : MonoBehaviourPun
 {
     [SerializeField] private float speed = 20f;
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private int damage = 10;
     [SerializeField] private float lifeTime = 3f;
 
     private void Start()

@@ -29,11 +29,11 @@ public class LoadingManager : MonoBehaviour
 
         if (string.IsNullOrEmpty(nextScene))
         {
-            Debug.LogWarning("SceneLoader.NextSceneNameÀÌ ºñ¾î ÀÖ½À´Ï´Ù. fallbackSceneNameÀ¸·Î ÀÌµ¿ÇÕ´Ï´Ù: " + fallbackSceneName);
+            Debug.LogWarning("SceneLoader.NextSceneNameì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤. fallbackSceneNameìœ¼ë¡œ ì´ë™í•©ë‹ˆë‹¤: " + fallbackSceneName);
             nextScene = fallbackSceneName;
         }
 
-        Debug.Log("LoadingScene¿¡¼­ ·ÎµåÇÒ ¾À: " + nextScene);
+        Debug.Log("LoadingSceneì—ì„œ ë¡œë“œí•  ì”¬: " + nextScene);
 
         StartCoroutine(LoadSceneAsync(nextScene));
     }
@@ -42,13 +42,13 @@ public class LoadingManager : MonoBehaviour
     {
         if (backgroundImage == null)
         {
-            Debug.LogWarning("Background Image°¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("Background Imageê°€ ì—°ê²°ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.");
             return;
         }
 
         if (loadingBackgrounds == null || loadingBackgrounds.Length == 0)
         {
-            Debug.LogWarning("Loading Backgrounds°¡ ºñ¾î ÀÖ½À´Ï´Ù.");
+            Debug.LogWarning("Loading Backgroundsê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -59,7 +59,7 @@ public class LoadingManager : MonoBehaviour
     private IEnumerator LoadSceneAsync(string sceneName)
     {
         if (loadingText != null)
-            loadingText.text = "½£ÀÇ ±â¾ïÀ» ºÒ·¯¿À´Â Áß...";
+            loadingText.text = "ìˆ²ì˜ ê¸°ì–µì„ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘...";
 
         if (loadingSlider != null)
             loadingSlider.value = 0f;
@@ -73,7 +73,7 @@ public class LoadingManager : MonoBehaviour
 
         if (operation == null)
         {
-            Debug.LogError("¾ÀÀ» ·ÎµåÇÒ ¼ö ¾ø½À´Ï´Ù. Build Profiles¿¡ ¾ÀÀÌ µî·ÏµÇ¾î ÀÖ´ÂÁö È®ÀÎÇÏ¼¼¿ä: " + sceneName);
+            Debug.LogError("ì”¬ì„ ë¡œë“œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤. Build Profilesì— ì”¬ì´ ë“±ë¡ë˜ì–´ ìˆëŠ”ì§€ í™•ì¸í•˜ì„¸ìš”: " + sceneName);
             yield break;
         }
 

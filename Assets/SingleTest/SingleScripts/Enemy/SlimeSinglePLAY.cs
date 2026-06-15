@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class SlimeSinglePlay : MonoBehaviour
+public class SlimeSinglePlay : MonoBehaviour, IDamageable
 {
     [Header("Status")]
     public int maxHealth = 1;

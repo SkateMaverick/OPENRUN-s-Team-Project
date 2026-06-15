@@ -26,7 +26,7 @@ public class PlayerShooter : BaseShooter
         _lastFireTime = Time.time;
         
         // 추후 변경
-        if (Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation).TryGetComponent<ILaunchable>(out ILaunchable launchable))
+        if (Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation).TryGetComponent<IProjectile>(out IProjectile launchable))
         {
             launchable.Launch(projectileSpeed);
         }

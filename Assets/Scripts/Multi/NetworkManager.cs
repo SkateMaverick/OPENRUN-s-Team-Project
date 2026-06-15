@@ -69,7 +69,7 @@ public class NetworkManager : MonoBehaviour
             // 1. 카메라 할당
             // 플레이어를 생성하고 담음
             // 씬에 있는 MainCamera 스크립트를 찾음
-            NetworkMainCamera mainCam = FindObjectOfType<NetworkMainCamera>();
+            NetworkMainCamera mainCam = FindFirstObjectByType<NetworkMainCamera>();
 
             // 카메라가 대상으로 지정할 타겟으로 할당
             if (mainCam != null)

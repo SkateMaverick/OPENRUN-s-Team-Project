@@ -28,7 +28,7 @@ public class Health : MonoBehaviourPun, IDamageable
     
     // 이 함수는 '마스터 클라이언트'의 권한으로 총을 맞았을 때 호출됩니다. (Raycast 판정 등)
     [PunRPC]
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         // 1. 데미지 계산은 오직 마스터 클라이언트만 독점합니다.
         if (PhotonNetwork.IsMasterClient)
