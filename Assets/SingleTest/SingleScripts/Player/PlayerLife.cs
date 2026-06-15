@@ -16,14 +16,14 @@ public class PlayerLife : MonoBehaviour, IDamageable
         ResetLife();
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
         if (IsDead)
             return;
 
         CurrentHealth -= damage;
 
-        Debug.Log($"{gameObject.name} µ¥¹ÌÁö: {damage}, ÇöÀç Ã¼·Â: {CurrentHealth}");
+        Debug.Log($"{gameObject.name} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½: {damage}, ï¿½ï¿½ï¿½ï¿½ Ã¼ï¿½ï¿½: {CurrentHealth}");
 
         if (CurrentHealth <= 0f)
         {
@@ -39,7 +39,7 @@ public class PlayerLife : MonoBehaviour, IDamageable
         IsDead = true;
         CurrentHealth = 0f;
 
-        Debug.Log($"{gameObject.name} »ç¸Á ¡æ ¸®½ºÆù ¿¹Á¤");
+        Debug.Log($"{gameObject.name} ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 
         Invoke(nameof(Respawn), respawnDelay);
     }

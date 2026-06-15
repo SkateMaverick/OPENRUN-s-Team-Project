@@ -1,4 +1,4 @@
-public interface ILaunchable
+public interface IProjectile
 {
     void Launch(float speed);
 }

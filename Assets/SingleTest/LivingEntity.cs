@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public abstract class LivingEntity : MonoBehaviour
+public abstract class LivingEntity : MonoBehaviour, IDamageable
 {
     //public event Action OnHit;
     //public event Action OnDeath;
@@ -15,7 +15,7 @@ public abstract class LivingEntity : MonoBehaviour
     }
     
     // 외부에서 대미지를 받는 메서드
-    public virtual void ApplyDamage(float damage)
+    public virtual void TakeDamage(int damage = 0)
     {
         // 받은 데미지만큼 현재 체력 감소
         _health -= damage;
