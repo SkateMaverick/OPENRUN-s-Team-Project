@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7208612857458809589}
   - component: {fileID: 1394391363910324012}
   - component: {fileID: 100992402915983060}
-  - component: {fileID: 3173451213042521614}
+  - component: {fileID: -3606458886703546457}
   m_Layer: 11
   m_Name: Slime
   m_TagString: Untagged
@@ -110,7 +110,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.46, z: 0}
---- !u!114 &3173451213042521614
+--- !u!114 &-3606458886703546457
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -119,17 +119,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 2330868372722797677}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff63929eeac9c8240b3e8432d8eabbb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e1ea084d9c0cf54aa93acfe4375e288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
   speed: 1
   detectRange: 10
+  attackRange: 1.4
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 8
-  targetTag: Player
-  attackRange: 1.2
+  attackCooldown: 1.5
+  attackMotionTime: 0.9
+  randomAttackMotion: 1
+  idleStateName: IdleBattle
+  walkStateName: WalkFWD
+  attackStateName01: Attack01
+  attackStateName02: Attack02
+  dieStateName: Die
 --- !u!1 &2714161359773962684
 GameObject:
   m_ObjectHideFlags: 0

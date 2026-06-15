@@ -126,12 +126,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e1ea084d9c0cf54aa93acfe4375e288, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
-  isDead: 0
   speed: 1
+  detectRange: 8
+  attackRange: 4
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 8
+  attackCooldown: 1.5
+  attackMotionTime: 1.3
+  randomAttackMotion: 1
+  idleStateName: IdleBattle
+  walkStateName: WalkFWD
+  attackStateName01: Attack01
+  attackStateName02: Attack02
+  dieStateName: Die
 --- !u!65 &100992402915983060
 BoxCollider:
   m_ObjectHideFlags: 0
