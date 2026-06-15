@@ -5,7 +5,7 @@ using UnityEngine;
 // 
 public class NetworkBullet : MonoBehaviour, IBullet
 {
-    [SerializeField] private float bulletDamage = 10f;  
+    [SerializeField] private int bulletDamage = 10;  
     private Rigidbody _rb;
 
     private void Awake()

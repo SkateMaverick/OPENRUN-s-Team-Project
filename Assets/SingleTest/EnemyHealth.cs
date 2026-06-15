@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyHealth : LivingEntity
 {
-    public override void ApplyDamage(float damage)
+    public override void TakeDamage(int damage)
     {
-        base.ApplyDamage(damage);
+        base.TakeDamage(damage);
     }
 
     protected override void Die()

@@ -18,7 +18,7 @@ public class EnemyTurretController : MonoBehaviourPun
     [SerializeField] private Transform muzzlePoint;
     [SerializeField] private float attackAngle = 8f;
     [SerializeField] private float fireInterval = 0.5f;
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private int damage = 10;
     [SerializeField] private float attackRange = 20f;
 
     [Header("Line Of Sight")]

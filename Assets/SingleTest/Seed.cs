@@ -4,10 +4,10 @@ using UnityEngine;
 /// <summary>
 /// 노아가 쏘는 투사체.
 /// </summary>
-public class Seed : MonoBehaviour, ILaunchable
+public class Seed : MonoBehaviour, IProjectile
 {
-    [SerializeField] private LayerMask whatIsTarget; // ApplyDamage()를 실행할 수 있는 대상들
-    [SerializeField] private float attackDamage; // 씨앗 피격시 대미지
+    [SerializeField] private LayerMask whatIsTarget; // TakeDamage()를 실행할 수 있는 대상들
+    [SerializeField] private int attackDamage = 10; // 씨앗 피격시 대미지
     
     private Rigidbody _rigidbody;
 
@@ -28,14 +28,14 @@ public class Seed : MonoBehaviour, ILaunchable
             //other.gameObject.GetComponent<SlimeSinglePlay>().TakeDamage(5);
             
             // 추후 변경
-            if (other.gameObject.TryGetComponent<LivingEntity>(out LivingEntity livingEntity))
-            {
-                livingEntity.ApplyDamage(attackDamage);
-            }
+            // if (other.gameObject.TryGetComponent<LivingEntity>(out LivingEntity livingEntity))
+            // {
+            //     livingEntity.TakeDamage(attackDamage);
+            // }
             
-            if (other.gameObject.TryGetComponent<SlimeSinglePlay>(out SlimeSinglePlay slimeSinglePlay))
+            if (other.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
             {
-                slimeSinglePlay.TakeDamage(5);
+                damageable.TakeDamage(attackDamage);
             }
         }
         Destroy(gameObject);

@@ -30,12 +30,12 @@ public class SceneLoader : MonoBehaviour
     {
         if (string.IsNullOrEmpty(targetSceneName))
         {
-            Debug.LogError("ÀÌµ¿ÇÒ ¾À ÀÌ¸§ÀÌ ºñ¾î ÀÖ½À´Ï´Ù.");
+            Debug.LogError("ì´ë™í•  ì”¬ ì´ë¦„ì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.");
             return;
         }
 
         NextSceneName = targetSceneName;
-        Debug.Log("´ÙÀ½ ¾À ¼³Á¤: " + NextSceneName);
+        Debug.Log("ë‹¤ìŒ ì”¬ ì„¤ì •: " + NextSceneName);
 
         SceneManager.LoadScene(loadingSceneName);
     }
