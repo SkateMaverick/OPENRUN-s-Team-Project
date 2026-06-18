@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
 
     private PlayerInputReader _playerInputReader;
 
+    public Enums.CharacterType CurrentCharacterType => _currentCharacter == _boxGolem
+        ? Enums.CharacterType.BoxGolem
+        : Enums.CharacterType.SphereGolem;
+
     private void Awake()
     {
         _playerInputReader = GetComponent<PlayerInputReader>();
