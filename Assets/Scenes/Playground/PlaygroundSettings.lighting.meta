@@ -9,8 +9,7 @@ NativeFormatImporter:
 AssetOrigin:
   serializedVersion: 1
   productId: 196526
-  packageName: Starter Assets - ThirdPerson | Updates in new CharacterController
-    package
-  packageVersion: 1.1.5
-  assetPath: Assets/01 Scenes/PlaygroundSettings.lighting
-  uploadId: 691128
+  packageName: 'Starter Assets: Character Controllers | URP'
+  packageVersion: 2.0
+  assetPath: Assets/Scenes/Playground/PlaygroundSettings.lighting
+  uploadId: 988808

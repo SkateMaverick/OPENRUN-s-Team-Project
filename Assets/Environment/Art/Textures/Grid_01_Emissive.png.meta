@@ -145,8 +145,7 @@ TextureImporter:
 AssetOrigin:
   serializedVersion: 1
   productId: 196526
-  packageName: Starter Assets - ThirdPerson | Updates in new CharacterController
-    package
-  packageVersion: 
+  packageName: 'Starter Assets: Character Controllers | URP'
+  packageVersion: 2.0
   assetPath: Assets/Environment/Art/Textures/Grid_01_Emissive.png
-  uploadId: 0
+  uploadId: 988808

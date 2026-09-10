@@ -8,8 +8,7 @@ DefaultImporter:
 AssetOrigin:
   serializedVersion: 1
   productId: 196526
-  packageName: Starter Assets - ThirdPerson | Updates in new CharacterController
-    package
-  packageVersion: 1.1.5
-  assetPath: Assets/01 Scenes/Playground.unity
-  uploadId: 691128
+  packageName: 'Starter Assets: Character Controllers | URP'
+  packageVersion: 2.0
+  assetPath: Assets/Scenes/Playground/Playground.unity
+  uploadId: 988808
