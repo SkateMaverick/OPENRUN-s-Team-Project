@@ -102,7 +102,8 @@ namespace Player.InputActions
                 return;
             }
 
-            LookInput = context.ReadValue<Vector2>();
+            Vector2 rawLook = context.ReadValue<Vector2>();
+            LookInput = rawLook * GameSettingsManager.MouseSensitivity;
         }
 
         private void OnJump(InputAction.CallbackContext context)

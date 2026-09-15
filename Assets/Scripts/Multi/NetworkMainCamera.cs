@@ -50,8 +50,9 @@ namespace Player.Script.CameraScript
             if (!isUsingCursor)
             {
                 Vector2 lookInput = _playerInput.LookInput;
-                _currentYaw += lookInput.x * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
-                _currentPitch -= lookInput.y * rotationSpeed * Time.deltaTime * sensitivityMultiplier;
+                float currentSensitivity = GameSettingsManager.MouseSensitivity;
+                _currentYaw += lookInput.x * rotationSpeed * Time.deltaTime * sensitivityMultiplier * currentSensitivity;
+                _currentPitch -= lookInput.y * rotationSpeed * Time.deltaTime * sensitivityMultiplier * currentSensitivity;
                 _currentPitch = Mathf.Clamp(_currentPitch, bottomClamp, topClamp);
             }
 

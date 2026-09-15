@@ -7,4 +7,20 @@ namespace Enums
         SphereGolem,
         BoxGolem
     }
+
+    /// <summary> 인게임 그래픽 품질 단계 </summary>
+    public enum GraphicQualityLevel
+    {
+        Low = 0,
+        Middle = 1,
+        High = 2
+    }
+
+    /// <summary> 커서 타입 </summary>
+    public enum GameCursorType
+    {
+        Default,
+        Hover,
+        Custom
+    }
 }
