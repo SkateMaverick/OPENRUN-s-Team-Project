@@ -4,6 +4,9 @@ using Unity.Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
+    public event System.Action<Transform> OnCharacterChanged;
+
     public GameObject sphereGolem; // 큐 게임오브젝트
     public GameObject boxGolem; // 노아 게임오브젝트
 
@@ -20,8 +23,13 @@ public class PlayerController : MonoBehaviour
         ? Enums.CharacterType.BoxGolem
         : Enums.CharacterType.SphereGolem;
 
+    public Transform CurrentCharacterTransform => _currentCharacter == _boxGolem
+        ? (boxGolem != null ? boxGolem.transform : null)
+        : (sphereGolem != null ? sphereGolem.transform : null);
+
     private void Awake()
     {
+        Instance = this;
         _playerInputReader = GetComponent<PlayerInputReader>();
 
         _sphereGolem = sphereGolem.GetComponent<IControllable>();
@@ -57,8 +65,9 @@ public class PlayerController : MonoBehaviour
         );
     }
 
-    private void SwitchToBoxGolem()
+    public void SwitchToBoxGolem()
     {
+        if (_boxGolem == null && boxGolem != null) _boxGolem = boxGolem.GetComponent<IControllable>();
         _currentCharacter = _boxGolem;
 
         if (sphereGolemVirtualCamera != null)
@@ -66,10 +75,13 @@ public class PlayerController : MonoBehaviour
 
         if (boxGolemVirtualCamera != null)
             boxGolemVirtualCamera.gameObject.SetActive(true);
+
+        OnCharacterChanged?.Invoke(CurrentCharacterTransform);
     }
 
-    private void SwitchToSphereGolem()
+    public void SwitchToSphereGolem()
     {
+        if (_sphereGolem == null && sphereGolem != null) _sphereGolem = sphereGolem.GetComponent<IControllable>();
         _currentCharacter = _sphereGolem;
 
         if (sphereGolemVirtualCamera != null)
@@ -77,6 +89,8 @@ public class PlayerController : MonoBehaviour
 
         if (boxGolemVirtualCamera != null)
             boxGolemVirtualCamera.gameObject.SetActive(false);
+
+        OnCharacterChanged?.Invoke(CurrentCharacterTransform);
     }
 
 

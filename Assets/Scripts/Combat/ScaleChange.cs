@@ -14,18 +14,41 @@ public class ScaleChange : MonoBehaviour
     private float _currentLengthWeight; // 런타임에서 Stretch_Length 쉐이프 키의 가중치
     private float _currentWidthWeight; // 런타임에서 Stretch_Width 쉐이프 키의 가중치
 
+    private bool _isInitialized = false;
+
     private void Awake()
     {
-        _boxCollider = GetComponent<BoxCollider>();
-        _initialBoxColliderSize = _boxCollider.size; // 초기 기본 콜라이더 사이즈 저장
+        InitIfNeeded();
+    }
+
+    private void InitIfNeeded()
+    {
+        if (_isInitialized) return;
+
+        if (_boxCollider == null)
+        {
+            _boxCollider = GetComponent<BoxCollider>();
+            if (_boxCollider != null)
+            {
+                _initialBoxColliderSize = _boxCollider.size;
+            }
+        }
         
-        _lengthIndex = skinnedMeshRenderer.sharedMesh.GetBlendShapeIndex("Stretch_Length");
-        _widthIndex = skinnedMeshRenderer.sharedMesh.GetBlendShapeIndex("Stretch_Width");
+        if (skinnedMeshRenderer != null && skinnedMeshRenderer.sharedMesh != null)
+        {
+            _lengthIndex = skinnedMeshRenderer.sharedMesh.GetBlendShapeIndex("Stretch_Length");
+            _widthIndex = skinnedMeshRenderer.sharedMesh.GetBlendShapeIndex("Stretch_Width");
+        }
+
+        _isInitialized = true;
     }
 
     // 크기조절 UI에 직접 연결해야 함
     public void OnSliderValueChanged(float value)
     {
+        InitIfNeeded();
+        if (skinnedMeshRenderer == null || _boxCollider == null) return;
+
         float changeValue; // 쉐이프 키 가중치로 들어갈 값
         
         if (value < 0.5f)

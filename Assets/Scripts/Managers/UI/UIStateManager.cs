@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class UIStateManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIStateManager : MonoBehaviour
     public event Action<bool> OnUIStateChanged;
 
     private readonly HashSet<string> _openUIKeys = new HashSet<string>();
+    private readonly List<CinemachineInputAxisController> _disabledControllers = new List<CinemachineInputAxisController>();
 
     private void Awake()
     {
@@ -33,6 +35,7 @@ public class UIStateManager : MonoBehaviour
         if (!wasOpen && IsAnyUIOpen)
         {
             ApplyCursorState(true);
+            SetCameraInputBlocked(true);
             OnUIStateChanged?.Invoke(true);
         }
     }
@@ -46,6 +49,7 @@ public class UIStateManager : MonoBehaviour
         if (wasOpen && !IsAnyUIOpen)
         {
             ApplyCursorState(false);
+            SetCameraInputBlocked(false);
             OnUIStateChanged?.Invoke(false);
         }
     }
@@ -62,5 +66,33 @@ public class UIStateManager : MonoBehaviour
     {
         Cursor.visible = uiOpen;
         Cursor.lockState = uiOpen ? CursorLockMode.None : CursorLockMode.Locked;
+    }
+
+    private void SetCameraInputBlocked(bool blocked)
+    {
+        if (blocked)
+        {
+            _disabledControllers.Clear();
+            var controllers = UnityEngine.Object.FindObjectsByType<CinemachineInputAxisController>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            foreach (var controller in controllers)
+            {
+                if (controller != null && controller.enabled)
+                {
+                    controller.enabled = false;
+                    _disabledControllers.Add(controller);
+                }
+            }
+        }
+        else
+        {
+            foreach (var controller in _disabledControllers)
+            {
+                if (controller != null)
+                {
+                    controller.enabled = true;
+                }
+            }
+            _disabledControllers.Clear();
+        }
     }
 }
