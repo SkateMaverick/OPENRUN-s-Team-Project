@@ -75,6 +75,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6270591093723330120}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5629141186405180905}
   m_SourcePrefab: {fileID: 100100000, guid: 20a077836e5c8794f9220f7a604fa019, type: 3}
 --- !u!137 &2135295524334045484 stripped
 SkinnedMeshRenderer:
@@ -187,3 +190,16 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.16
   m_Center: {x: 0, y: 1.11, z: 0}
+--- !u!114 &5629141186405180905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9089157110108270340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 433898c92e797f548b0c545c03167ce8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingHealth: 100

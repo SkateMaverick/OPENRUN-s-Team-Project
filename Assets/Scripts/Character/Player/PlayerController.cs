@@ -41,6 +41,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        // 일시정지 중이거나 PausePanel이 열려있을 때는 캐릭터 변경 방지
+        if (PauseUI.Instance != null && PauseUI.Instance.IsPaused)
+        {
+            return;
+        }
+
         // 키보드 상단 숫자 1번 = 노아
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {

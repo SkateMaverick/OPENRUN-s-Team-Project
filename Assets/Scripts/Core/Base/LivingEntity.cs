@@ -9,9 +9,14 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
     [SerializeField] private float startingHealth = 100f; // 시작 체력
     private float _health; // 현재 체력
 
+    public float StartingHealth => startingHealth;
+    public float Health => _health > 0f ? _health : startingHealth;
+    public event Action<float, float> OnHealthChanged;
+
     protected void Awake()
     {
         _health = startingHealth;
+        OnHealthChanged?.Invoke(_health, startingHealth);
     }
     
     // 외부에서 대미지를 받는 메서드
@@ -19,6 +24,7 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
     {
         // 받은 데미지만큼 현재 체력 감소
         _health -= damage;
+        OnHealthChanged?.Invoke(_health, startingHealth);
         
         // '현재 체력 <= 0' 이라면
         if (_health <= 0)
@@ -26,6 +32,12 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
             // 사망(파괴)
             Die();
         }
+    }
+
+    public virtual void Heal(float amount)
+    {
+        _health = Mathf.Min(_health + amount, startingHealth);
+        OnHealthChanged?.Invoke(_health, startingHealth);
     }
 
     // 사망(또는 파괴) 처리

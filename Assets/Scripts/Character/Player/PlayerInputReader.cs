@@ -80,7 +80,17 @@ namespace Player.InputActions
 
         private bool IsUsingCursorUI()
         {
-            return UIStateManager.Instance != null && UIStateManager.Instance.IsAnyUIOpen;
+            if (UIStateManager.Instance != null)
+            {
+                return UIStateManager.Instance.IsCursorActive;
+            }
+
+            if (Keyboard.current != null && Keyboard.current.leftAltKey.isPressed)
+            {
+                return true;
+            }
+
+            return Input.GetKey(KeyCode.LeftAlt);
         }
 
         private void OnMove(InputAction.CallbackContext context)
@@ -148,6 +158,11 @@ namespace Player.InputActions
                 FireInput = false;
                 SprintInput = false;
                 return;
+            }
+
+            if (_playerAction != null && _playerAction.PlayerActions.Move.enabled)
+            {
+                MoveInput = _playerAction.PlayerActions.Move.ReadValue<Vector2>();
             }
 
             if (CurrentDevice.IsMobile)

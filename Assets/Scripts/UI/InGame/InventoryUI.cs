@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
+    private const string UI_KEY = "InventoryUI";
+
     public InventorySlotUI[] slotUIs;
 
     private void Start()
@@ -15,11 +17,42 @@ public class InventoryUI : MonoBehaviour
         Refresh();
     }
 
+    private void OnEnable()
+    {
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.OpenUI(UI_KEY);
+        }
+        else
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.CloseUI(UI_KEY);
+        }
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
     private void OnDestroy()
     {
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.onInventoryChanged -= Refresh;
+        }
+
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.CloseUI(UI_KEY);
         }
     }
 
@@ -42,17 +75,11 @@ public class InventoryUI : MonoBehaviour
     {
         gameObject.SetActive(true);
         Refresh();
-
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
     }
 
     public void Close()
     {
         gameObject.SetActive(false);
-
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void Toggle()
@@ -63,13 +90,6 @@ public class InventoryUI : MonoBehaviour
         if (isOpen)
         {
             Refresh();
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }

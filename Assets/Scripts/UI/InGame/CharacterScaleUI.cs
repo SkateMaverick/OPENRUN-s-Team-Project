@@ -160,10 +160,18 @@ public class CharacterScaleUI : MonoBehaviour
 
     public void OpenPanel()
     {
-        // Only open the menu if Noa is the currently active character
+        // Only open the menu if Noa is the currently active character, or switch to Noa
         if (!IsNoaSelected())
         {
-            return;
+            var pc = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
+            if (pc != null)
+            {
+                pc.SwitchToBoxGolem();
+            }
+            else
+            {
+                return;
+            }
         }
 
         EnsureTargetCharacter();

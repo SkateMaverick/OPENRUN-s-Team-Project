@@ -17,16 +17,18 @@ public class CharacterPartySlotUI : MonoBehaviour
     public TextMeshProUGUI numberText;
     public Image numberBadgeImage;
     public Slider healthBar;
-    public Image activeIndicator;
+    public Image activeArrowImage;
+    public Image burstGemImage;
     public Button slotButton;
 
     [Header("Visual Colors")]
-    public Color normalCardColor = new Color(0.12f, 0.14f, 0.18f, 0.70f);
-    public Color activeCardColor = new Color(0.20f, 0.28f, 0.38f, 0.95f);
+    public Color normalCardColor = new Color(0f, 0f, 0f, 0f); // Floating transparent
+    public Color activeCardColor = new Color(0.15f, 0.2f, 0.28f, 0.35f); // Subtle soft highlight
     public Color activeGlowColor = new Color(1f, 1f, 1f, 1f);
-    public Color inactiveGlowColor = new Color(0.8f, 0.8f, 0.8f, 0.4f);
+    public Color inactiveGlowColor = new Color(0.75f, 0.78f, 0.85f, 0.65f);
 
     private bool _isActive = false;
+    private PlayerHealth _boundHealth;
 
     private void Awake()
     {
@@ -45,6 +47,44 @@ public class CharacterPartySlotUI : MonoBehaviour
     private void Start()
     {
         ApplySlotData();
+        BindHealth();
+    }
+
+    private void OnDestroy()
+    {
+        if (_boundHealth != null)
+        {
+            _boundHealth.OnHealthChanged -= OnHealthChanged;
+        }
+    }
+
+    public void BindHealth()
+    {
+        if (_boundHealth != null)
+        {
+            _boundHealth.OnHealthChanged -= OnHealthChanged;
+            _boundHealth = null;
+        }
+
+        var pc = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
+        if (pc != null)
+        {
+            GameObject charObj = (characterType == Enums.CharacterType.BoxGolem) ? pc.boxGolem : pc.sphereGolem;
+            if (charObj != null)
+            {
+                _boundHealth = charObj.GetComponent<PlayerHealth>();
+                if (_boundHealth != null)
+                {
+                    _boundHealth.OnHealthChanged += OnHealthChanged;
+                    SetHealth(_boundHealth.Health, _boundHealth.StartingHealth);
+                }
+            }
+        }
+    }
+
+    private void OnHealthChanged(float current, float max)
+    {
+        SetHealth(current, max);
     }
 
     public void ApplySlotData()
@@ -71,13 +111,25 @@ public class CharacterPartySlotUI : MonoBehaviour
 
         if (nameText != null)
         {
-            nameText.color = isActive ? Color.white : new Color(0.82f, 0.85f, 0.9f, 0.85f);
+            nameText.color = isActive ? Color.white : new Color(0.9f, 0.92f, 0.95f, 0.9f);
             nameText.fontStyle = isActive ? FontStyles.Bold : FontStyles.Normal;
         }
 
-        if (activeIndicator != null)
+        // Active character shows left arrow, teammate shows burst gem
+        if (activeArrowImage != null)
         {
-            activeIndicator.gameObject.SetActive(isActive);
+            activeArrowImage.gameObject.SetActive(isActive);
+        }
+
+        if (burstGemImage != null)
+        {
+            burstGemImage.gameObject.SetActive(!isActive);
+        }
+
+        // Teammates show their slim HP bar; active character HP is displayed at bottom center
+        if (healthBar != null)
+        {
+            healthBar.gameObject.SetActive(!isActive);
         }
 
         if (avatarFrameImage != null)
@@ -85,11 +137,16 @@ public class CharacterPartySlotUI : MonoBehaviour
             avatarFrameImage.color = isActive ? activeGlowColor : inactiveGlowColor;
         }
 
-        // Slight scale punch / offset for active slot
+        if (numberBadgeImage != null)
+        {
+            numberBadgeImage.color = isActive ? Color.white : new Color(0.85f, 0.88f, 0.92f, 0.85f);
+        }
+
+        // Subtle punch for active slot
         var rt = GetComponent<RectTransform>();
         if (rt != null)
         {
-            rt.localScale = isActive ? new Vector3(1.05f, 1.05f, 1.05f) : Vector3.one;
+            rt.localScale = isActive ? new Vector3(1.04f, 1.04f, 1.04f) : Vector3.one;
         }
     }
 
@@ -104,15 +161,16 @@ public class CharacterPartySlotUI : MonoBehaviour
 
     private void OnSlotClicked()
     {
-        if (PlayerController.Instance == null) return;
+        var pc = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
+        if (pc == null) return;
 
         if (characterType == Enums.CharacterType.BoxGolem)
         {
-            PlayerController.Instance.SwitchToBoxGolem();
+            pc.SwitchToBoxGolem();
         }
         else if (characterType == Enums.CharacterType.SphereGolem)
         {
-            PlayerController.Instance.SwitchToSphereGolem();
+            pc.SwitchToSphereGolem();
         }
     }
 }

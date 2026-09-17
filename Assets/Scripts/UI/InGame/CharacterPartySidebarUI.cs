@@ -6,40 +6,46 @@ public class CharacterPartySidebarUI : MonoBehaviour
     public CharacterPartySlotUI noaSlot;
     public CharacterPartySlotUI queSlot;
 
+    private PlayerController _playerController;
+
     private void Start()
     {
         InitializeParty();
-
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.OnCharacterChanged += OnCharacterChanged;
-            RefreshSelection(PlayerController.Instance.CurrentCharacterType);
-        }
+        BindPlayerController();
     }
 
     private void OnEnable()
     {
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.OnCharacterChanged -= OnCharacterChanged;
-            PlayerController.Instance.OnCharacterChanged += OnCharacterChanged;
-            RefreshSelection(PlayerController.Instance.CurrentCharacterType);
-        }
+        BindPlayerController();
     }
 
     private void OnDisable()
     {
-        if (PlayerController.Instance != null)
-        {
-            PlayerController.Instance.OnCharacterChanged -= OnCharacterChanged;
-        }
+        UnbindPlayerController();
     }
 
     private void OnDestroy()
     {
-        if (PlayerController.Instance != null)
+        UnbindPlayerController();
+    }
+
+    private void BindPlayerController()
+    {
+        UnbindPlayerController();
+        _playerController = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
+        if (_playerController != null)
         {
-            PlayerController.Instance.OnCharacterChanged -= OnCharacterChanged;
+            _playerController.OnCharacterChanged += OnCharacterChanged;
+            RefreshSelection(_playerController.CurrentCharacterType);
+        }
+    }
+
+    private void UnbindPlayerController()
+    {
+        if (_playerController != null)
+        {
+            _playerController.OnCharacterChanged -= OnCharacterChanged;
+            _playerController = null;
         }
     }
 
