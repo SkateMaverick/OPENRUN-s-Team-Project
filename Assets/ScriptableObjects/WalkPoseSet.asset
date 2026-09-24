@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b0d1b8862578343a8cc5829f00158b, type: 3}
+  m_Name: WalkPoseSet
+  m_EditorClassIdentifier: Assembly-CSharp::WalkPoseSet
+  keyframes:
+  - leadTargetPosition: {x: -0.56, y: -0.09, z: 0}
+    leadHintPosition: {x: -0.56, y: 0.55, z: 0.25}
+    followTargetPosition: {x: 0.56, y: -0.09, z: 0}
+    followHintPosition: {x: 0.56, y: 0.55, z: 0.25}
+    duration: 0.4
+  - leadTargetPosition: {x: -0.56, y: -0.02, z: 0.28}
+    leadHintPosition: {x: -0.56, y: 0.55, z: 0.25}
+    followTargetPosition: {x: 0.56, y: 0.26, z: -0.7}
+    followHintPosition: {x: 1.7, y: 0.55, z: 0.18}
+    duration: 0.25
+  - leadTargetPosition: {x: -0.56, y: -0.09, z: 0}
+    leadHintPosition: {x: -0.56, y: 0.55, z: 0.25}
+    followTargetPosition: {x: 0.84, y: 0, z: 0}
+    followHintPosition: {x: 0.8, y: 0.55, z: 0}
+    duration: 0.25
+  - leadTargetPosition: {x: -0.56, y: -0.12, z: -0.98}
+    leadHintPosition: {x: -0.56, y: 0.55, z: 0.25}
+    followTargetPosition: {x: 0.56, y: 0.04, z: 0.35}
+    followHintPosition: {x: 0.56, y: 0.55, z: 0.25}
+    duration: 0.25

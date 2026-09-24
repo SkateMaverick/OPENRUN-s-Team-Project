@@ -54,7 +54,7 @@ public class CharacterPartySidebarUI : MonoBehaviour
         if (noaSlot != null)
         {
             noaSlot.characterType = Enums.CharacterType.BoxGolem;
-            noaSlot.characterName = "Noa";
+            noaSlot.characterName = "Que";
             noaSlot.slotNumber = 1;
             noaSlot.ApplySlotData();
             noaSlot.SetHealth(100f, 100f);
@@ -63,7 +63,7 @@ public class CharacterPartySidebarUI : MonoBehaviour
         if (queSlot != null)
         {
             queSlot.characterType = Enums.CharacterType.SphereGolem;
-            queSlot.characterName = "Que";
+            queSlot.characterName = "Noa";
             queSlot.slotNumber = 2;
             queSlot.ApplySlotData();
             queSlot.SetHealth(100f, 100f);
@@ -77,8 +77,8 @@ public class CharacterPartySidebarUI : MonoBehaviour
         {
             if (currentTransform != null)
             {
-                bool isNoa = currentTransform == (pc.boxGolem != null ? pc.boxGolem.transform : null) || currentTransform.name.Contains("Noa");
-                RefreshSelection(isNoa ? Enums.CharacterType.BoxGolem : Enums.CharacterType.SphereGolem);
+                bool isQue = currentTransform == (pc.boxGolem != null ? pc.boxGolem.transform : null) || currentTransform.name.Contains("Que");
+                RefreshSelection(isQue ? Enums.CharacterType.BoxGolem : Enums.CharacterType.SphereGolem);
             }
             else
             {

@@ -12,7 +12,7 @@ public class CharacterScaleUI : MonoBehaviour
     public TextMeshProUGUI scaleValueText;
     public Button backButton;
 
-    [Header("Target Character (Noa Only)")]
+    [Header("Target Character (Que Only)")]
     public Transform targetCharacter;
 
     public bool IsOpen => scalePanel != null && scalePanel.activeSelf;
@@ -90,8 +90,8 @@ public class CharacterScaleUI : MonoBehaviour
 
     private void OnCharacterChanged(Transform currentCharacterTransform)
     {
-        // If switched to Que or another character while menu is open, close it
-        if (!IsNoaSelected() && IsOpen)
+        // If switched to Noa or another character while menu is open, close it
+        if (!IsQueSelected() && IsOpen)
         {
             ClosePanel();
         }
@@ -106,9 +106,9 @@ public class CharacterScaleUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks if the currently active / controlled character is Noa (BoxGolem).
+    /// Checks if the currently active / controlled character is Que (BoxGolem).
     /// </summary>
-    public bool IsNoaSelected()
+    public bool IsQueSelected()
     {
         var pc = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
         if (pc != null)
@@ -160,8 +160,8 @@ public class CharacterScaleUI : MonoBehaviour
 
     public void OpenPanel()
     {
-        // Only open the menu if Noa is the currently active character, or switch to Noa
-        if (!IsNoaSelected())
+        // Only open the menu if Que is the currently active character, or switch to Que
+        if (!IsQueSelected())
         {
             var pc = PlayerController.Instance != null ? PlayerController.Instance : Object.FindFirstObjectByType<PlayerController>();
             if (pc != null)
@@ -225,8 +225,8 @@ public class CharacterScaleUI : MonoBehaviour
     }
 
     /// <summary>
-    /// Ensures that only Noa (the character with ScaleChange) is targeted.
-    /// Que (SphereGolem) has no scale mechanics and must not be targeted.
+    /// Ensures that only Que (the character with ScaleChange) is targeted.
+    /// Noa (SphereGolem) has no scale mechanics and must not be targeted.
     /// </summary>
     private void EnsureTargetCharacter()
     {
@@ -236,14 +236,14 @@ public class CharacterScaleUI : MonoBehaviour
             return;
         }
 
-        // 2. Check PlayerController's boxGolem (Noa)
+        // 2. Check PlayerController's boxGolem (Que)
         if (PlayerController.Instance != null && PlayerController.Instance.boxGolem != null)
         {
             targetCharacter = PlayerController.Instance.boxGolem.transform;
             return;
         }
 
-        // 3. Find any ScaleChange in the scene (Noa's component)
+        // 3. Find any ScaleChange in the scene (Que's component)
         var scaleChangeObj = Object.FindFirstObjectByType<ScaleChange>();
         if (scaleChangeObj != null)
         {
@@ -251,17 +251,17 @@ public class CharacterScaleUI : MonoBehaviour
             return;
         }
 
-        // 4. Find GameObject named "Noa"
-        var noa = GameObject.Find("Noa");
-        if (noa != null)
+        // 4. Find GameObject named "Que"
+        var que = GameObject.Find("Que");
+        if (que != null)
         {
-            targetCharacter = noa.transform;
+            targetCharacter = que.transform;
         }
     }
 
     /// <summary>
-    /// Adjusts the scale blend shapes and collider of Noa.
-    /// Never modifies Que or scales arbitrary transforms.
+    /// Adjusts the scale blend shapes and collider of Que.
+    /// Never modifies Noa or scales arbitrary transforms.
     /// </summary>
     public void SetCharacterScale(float scaleValue)
     {
