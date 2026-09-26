@@ -18,7 +18,7 @@ public class PlayerLife : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        if (IsDead)
+        if (IsDead || gameObject.name.Contains("Que"))
             return;
 
         CurrentHealth -= damage;

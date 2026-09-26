@@ -8,6 +8,7 @@ public class Arrow : MonoBehaviour, IProjectile
     [SerializeField] private int attackDamage = 10;
     
     private Rigidbody _rigidbody;
+    private bool _hasHit = false;
 
     private void Awake()
     {
@@ -20,23 +21,46 @@ public class Arrow : MonoBehaviour, IProjectile
 
     private void OnCollisionEnter(Collision other)
     {
+        if (_hasHit) return;
+        _hasHit = true;
+
+        TryDamage(other.gameObject);
+        if (Application.isPlaying)
+            Destroy(gameObject);
+        else
+            DestroyImmediate(gameObject);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (_hasHit) return;
+
         if (((1 << other.gameObject.layer) & whatIsTarget) != 0)
         {
-            //other.gameObject.GetComponent<LivingEntity>().ApplyDamage(attackDamage);
-            //other.gameObject.GetComponent<SlimeSinglePlay>().TakeDamage(5);
-            
-            // 추후 변경
-            // if (other.gameObject.TryGetComponent<LivingEntity>(out LivingEntity livingEntity))
-            // {
-            //     livingEntity.TakeDamage(attackDamage);
-            // }
-            
-            if (other.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
+            _hasHit = true;
+            TryDamage(other.gameObject);
+            if (Application.isPlaying)
+                Destroy(gameObject);
+            else
+                DestroyImmediate(gameObject);
+        }
+    }
+
+    private void TryDamage(GameObject hitObj)
+    {
+        if (((1 << hitObj.layer) & whatIsTarget) != 0)
+        {
+            IDamageable damageable = hitObj.GetComponent<IDamageable>();
+            if (damageable == null)
+            {
+                damageable = hitObj.GetComponentInParent<IDamageable>();
+            }
+
+            if (damageable != null)
             {
                 damageable.TakeDamage(attackDamage);
             }
         }
-        Destroy(gameObject);
     }
 
     public void Launch(float speed)

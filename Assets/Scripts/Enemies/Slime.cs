@@ -1,8 +1,11 @@
 using System.Collections;
 using UnityEngine;
 
-public class Slime : MonoBehaviour
+public class Slime : MonoBehaviour, IDamageable
 {
+    [Header("Status")]
+    [SerializeField] private int maxHealth = 30;
+
     [Header("Move")]
     [SerializeField] private float speed = 1f;
 
@@ -15,7 +18,9 @@ public class Slime : MonoBehaviour
     // 탐지할 대상의 Layer
     [SerializeField] private LayerMask whatIsTarget;
 
-    [Header("Attack Motion Only")]
+    [Header("Attack Settings")]
+    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private float attackHitDelay = 0.4f;
 
     // 공격 모션을 너무 자주 반복하지 않도록 하는 쿨타임
     [SerializeField] private float attackCooldown = 1.5f;
@@ -41,6 +46,7 @@ public class Slime : MonoBehaviour
     // 싱글 플레이 기준이므로 Photon의 Health 대신 LivingEntity를 탐지 기준으로 사용
     private Transform target;
 
+    private int currentHealth;
     private bool isDead;
     private bool isAttacking;
 
@@ -49,6 +55,7 @@ public class Slime : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        currentHealth = maxHealth;
     }
 
     private void Start()
@@ -196,9 +203,42 @@ public class Slime : MonoBehaviour
          */
         PlayAnimation(attackState);
 
-        yield return new WaitForSeconds(attackMotionTime);
+        yield return new WaitForSeconds(attackHitDelay);
+
+        if (target != null && !isDead)
+        {
+            float distance = Vector3.Distance(transform.position, target.position);
+            if (distance <= attackRange + 1.0f)
+            {
+                IDamageable damageable = target.GetComponent<IDamageable>();
+                if (damageable == null)
+                {
+                    damageable = target.GetComponentInParent<IDamageable>();
+                }
+
+                if (damageable != null)
+                {
+                    damageable.TakeDamage(attackDamage);
+                }
+            }
+        }
+
+        float remainingTime = Mathf.Max(0f, attackMotionTime - attackHitDelay);
+        yield return new WaitForSeconds(remainingTime);
 
         isAttacking = false;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (isDead)
+            return;
+
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 
     private void LookAtTargetOnlyY()
@@ -257,7 +297,10 @@ public class Slime : MonoBehaviour
 
         PlayAnimation(dieStateName);
 
-        Destroy(gameObject, 5f);
+        if (Application.isPlaying)
+            Destroy(gameObject, 5f);
+        else
+            DestroyImmediate(gameObject);
     }
 
     /*

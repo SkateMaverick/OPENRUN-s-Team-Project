@@ -32,11 +32,40 @@ public class PlayerController : MonoBehaviour
         Instance = this;
         _playerInputReader = GetComponent<PlayerInputReader>();
 
-        _sphereGolem = sphereGolem.GetComponent<IControllable>();
-        _boxGolem = boxGolem.GetComponent<IControllable>();
+        if (sphereGolem == null)
+            sphereGolem = GameObject.Find("Noa");
+        if (boxGolem == null)
+            boxGolem = GameObject.Find("Que");
+
+        if (sphereGolem != null)
+            _sphereGolem = sphereGolem.GetComponent<IControllable>();
+        if (boxGolem != null)
+            _boxGolem = boxGolem.GetComponent<IControllable>();
+
+        InitializeCameras();
 
         // 기본 조종 캐릭터는 노아
         SwitchToSphereGolem();
+    }
+
+    private void InitializeCameras()
+    {
+        if (sphereGolemVirtualCamera == null)
+        {
+            var noaCamObj = GameObject.Find("NoaCam");
+            if (noaCamObj != null)
+                sphereGolemVirtualCamera = noaCamObj.GetComponent<CinemachineCamera>();
+
+            if (sphereGolemVirtualCamera == null)
+                sphereGolemVirtualCamera = FindFirstObjectByType<CinemachineCamera>();
+        }
+
+        if (boxGolemVirtualCamera == null)
+        {
+            var queCamObj = GameObject.Find("QueCam");
+            if (queCamObj != null)
+                boxGolemVirtualCamera = queCamObj.GetComponent<CinemachineCamera>();
+        }
     }
 
     private void Update()
@@ -76,11 +105,30 @@ public class PlayerController : MonoBehaviour
         if (_boxGolem == null && boxGolem != null) _boxGolem = boxGolem.GetComponent<IControllable>();
         _currentCharacter = _boxGolem;
 
-        if (sphereGolemVirtualCamera != null)
+        if (boxGolemVirtualCamera != null && sphereGolemVirtualCamera != null && boxGolemVirtualCamera != sphereGolemVirtualCamera)
+        {
+            SyncCameraAxes(sphereGolemVirtualCamera, boxGolemVirtualCamera);
             sphereGolemVirtualCamera.gameObject.SetActive(false);
-
-        if (boxGolemVirtualCamera != null)
             boxGolemVirtualCamera.gameObject.SetActive(true);
+        }
+        else if (sphereGolemVirtualCamera != null)
+        {
+            if (boxGolem != null)
+            {
+                sphereGolemVirtualCamera.Target.TrackingTarget = boxGolem.transform;
+                if (sphereGolemVirtualCamera.Target.LookAtTarget != null)
+                    sphereGolemVirtualCamera.Target.LookAtTarget = boxGolem.transform;
+            }
+        }
+        else if (boxGolemVirtualCamera != null)
+        {
+            if (boxGolem != null)
+            {
+                boxGolemVirtualCamera.Target.TrackingTarget = boxGolem.transform;
+                if (boxGolemVirtualCamera.Target.LookAtTarget != null)
+                    boxGolemVirtualCamera.Target.LookAtTarget = boxGolem.transform;
+            }
+        }
 
         OnCharacterChanged?.Invoke(CurrentCharacterTransform);
     }
@@ -90,13 +138,45 @@ public class PlayerController : MonoBehaviour
         if (_sphereGolem == null && sphereGolem != null) _sphereGolem = sphereGolem.GetComponent<IControllable>();
         _currentCharacter = _sphereGolem;
 
-        if (sphereGolemVirtualCamera != null)
-            sphereGolemVirtualCamera.gameObject.SetActive(true);
-
-        if (boxGolemVirtualCamera != null)
+        if (boxGolemVirtualCamera != null && sphereGolemVirtualCamera != null && boxGolemVirtualCamera != sphereGolemVirtualCamera)
+        {
+            SyncCameraAxes(boxGolemVirtualCamera, sphereGolemVirtualCamera);
             boxGolemVirtualCamera.gameObject.SetActive(false);
+            sphereGolemVirtualCamera.gameObject.SetActive(true);
+        }
+        else if (sphereGolemVirtualCamera != null)
+        {
+            if (sphereGolem != null)
+            {
+                sphereGolemVirtualCamera.Target.TrackingTarget = sphereGolem.transform;
+                if (sphereGolemVirtualCamera.Target.LookAtTarget != null)
+                    sphereGolemVirtualCamera.Target.LookAtTarget = sphereGolem.transform;
+            }
+        }
+        else if (boxGolemVirtualCamera != null)
+        {
+            if (sphereGolem != null)
+            {
+                boxGolemVirtualCamera.Target.TrackingTarget = sphereGolem.transform;
+                if (boxGolemVirtualCamera.Target.LookAtTarget != null)
+                    boxGolemVirtualCamera.Target.LookAtTarget = sphereGolem.transform;
+            }
+        }
 
         OnCharacterChanged?.Invoke(CurrentCharacterTransform);
+    }
+
+    private void SyncCameraAxes(CinemachineCamera fromCam, CinemachineCamera toCam)
+    {
+        if (fromCam == null || toCam == null) return;
+        var fromOrbital = fromCam.GetComponent<CinemachineOrbitalFollow>();
+        var toOrbital = toCam.GetComponent<CinemachineOrbitalFollow>();
+        if (fromOrbital != null && toOrbital != null)
+        {
+            toOrbital.HorizontalAxis.Value = fromOrbital.HorizontalAxis.Value;
+            toOrbital.VerticalAxis.Value = fromOrbital.VerticalAxis.Value;
+            toOrbital.RadialAxis.Value = fromOrbital.RadialAxis.Value;
+        }
     }
 
 

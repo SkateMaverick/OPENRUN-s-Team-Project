@@ -10,6 +10,7 @@ public class Seed : MonoBehaviour, IProjectile
     [SerializeField] private int attackDamage = 10; // 씨앗 피격시 대미지
     
     private Rigidbody _rigidbody;
+    private bool _hasHit = false;
 
     private void Awake()
     {
@@ -22,23 +23,26 @@ public class Seed : MonoBehaviour, IProjectile
 
     private void OnCollisionEnter(Collision other)
     {
+        if (_hasHit) return;
+        _hasHit = true;
+
         if (((1 << other.gameObject.layer) & whatIsTarget) != 0)
         {
-            //other.gameObject.GetComponent<LivingEntity>().ApplyDamage(attackDamage);
-            //other.gameObject.GetComponent<SlimeSinglePlay>().TakeDamage(5);
-            
-            // 추후 변경
-            // if (other.gameObject.TryGetComponent<LivingEntity>(out LivingEntity livingEntity))
-            // {
-            //     livingEntity.TakeDamage(attackDamage);
-            // }
-            
-            if (other.gameObject.TryGetComponent<IDamageable>(out IDamageable damageable))
+            IDamageable damageable = other.gameObject.GetComponent<IDamageable>();
+            if (damageable == null)
+            {
+                damageable = other.gameObject.GetComponentInParent<IDamageable>();
+            }
+
+            if (damageable != null)
             {
                 damageable.TakeDamage(attackDamage);
             }
         }
-        Destroy(gameObject);
+        if (Application.isPlaying)
+            Destroy(gameObject);
+        else
+            DestroyImmediate(gameObject);
     }
 
     public void Launch(float speed)

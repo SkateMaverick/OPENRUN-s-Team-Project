@@ -641,6 +641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingHealth: 100
+  isImmune: 1
 --- !u!114 &5627837913271411154
 MonoBehaviour:
   m_ObjectHideFlags: 0
