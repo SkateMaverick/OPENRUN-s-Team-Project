@@ -4,7 +4,30 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public static InventoryManager Instance;
+    public static InventoryManager Instance
+    {
+        get
+        {
+            if (_isShuttingDown) return null;
+
+            if (_instance == null)
+            {
+                _instance = FindFirstObjectByType<InventoryManager>();
+            }
+            return _instance;
+        }
+        private set => _instance = value;
+    }
+
+    private static InventoryManager _instance;
+    private static bool _isShuttingDown = false;
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticState()
+    {
+        _instance = null;
+        _isShuttingDown = false;
+    }
 
     public int maxSlotCount = 20;
     public List<InventorySlotData> slots = new List<InventorySlotData>();
@@ -13,17 +36,30 @@ public class InventoryManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
+        if (_instance == null)
         {
-            Instance = this;
+            _instance = this;
         }
-        else
+        else if (_instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
         InitSlots();
+    }
+
+    private void OnDestroy()
+    {
+        if (_instance == this)
+        {
+            _instance = null;
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        _isShuttingDown = true;
     }
 
     private void InitSlots()
@@ -36,10 +72,63 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    public int GetItemCount(ItemData item)
+    {
+        if (item == null) return 0;
+        int total = 0;
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (!slots[i].IsEmpty() && slots[i].item == item)
+            {
+                total += slots[i].amount;
+            }
+        }
+        return total;
+    }
+
+    public bool HasItem(ItemData item, int amount = 1)
+    {
+        return GetItemCount(item) >= amount;
+    }
+
+    public bool RemoveItem(ItemData item, int amount = 1)
+    {
+        if (item == null || amount <= 0) return false;
+        if (!HasItem(item, amount)) return false;
+
+        int remaining = amount;
+        for (int i = slots.Count - 1; i >= 0; i--)
+        {
+            if (!slots[i].IsEmpty() && slots[i].item == item)
+            {
+                if (slots[i].amount <= remaining)
+                {
+                    remaining -= slots[i].amount;
+                    slots[i].Clear();
+                }
+                else
+                {
+                    slots[i].amount -= remaining;
+                    remaining = 0;
+                }
+
+                if (remaining <= 0)
+                {
+                    break;
+                }
+            }
+        }
+
+        onInventoryChanged?.Invoke();
+        return true;
+    }
+
     public bool AddItem(ItemData item, int amount = 1)
     {
         if (item == null || amount <= 0)
             return false;
+
+        InitSlots();
 
         if (item.stackable)
         {
@@ -83,7 +172,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         onInventoryChanged?.Invoke();
-        Debug.Log("ÀÎº¥Åä¸®°¡ °¡µæ Ã¡½À´Ï´Ù.");
+        Debug.Log("ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¡ï¿½ï¿½ï¿½Ï´ï¿½.");
         return false;
     }
 }

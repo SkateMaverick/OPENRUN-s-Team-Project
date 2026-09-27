@@ -7,19 +7,19 @@ public class Slime : MonoBehaviour, IDamageable
     [SerializeField] private int maxHealth = 30;
 
     [Header("Move")]
-    [SerializeField] private float speed = 1f;
+    [SerializeField] private float speed = 2.5f;
 
     // 플레이어를 탐지할 범위
-    [SerializeField] private float detectRange = 10f;
+    [SerializeField] private float detectRange = 15f;
 
     // 이 거리 안으로 들어오면 더 이상 이동하지 않고 공격 모션을 재생
-    [SerializeField] private float attackRange = 1.4f;
+    [SerializeField] private float attackRange = 2.0f;
 
     // 탐지할 대상의 Layer
     [SerializeField] private LayerMask whatIsTarget;
 
     [Header("Attack Settings")]
-    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private int attackDamage = 15;
     [SerializeField] private float attackHitDelay = 0.4f;
 
     // 공격 모션을 너무 자주 반복하지 않도록 하는 쿨타임
@@ -31,8 +31,15 @@ public class Slime : MonoBehaviour, IDamageable
     // true이면 Attack01, Attack02 중 하나를 랜덤으로 재생
     [SerializeField] private bool randomAttackMotion = true;
 
-    [Header("Animation State Names")]
+    [Header("Audio Feedback")]
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private AudioClip hitSound;
 
+    [Header("Drop Settings")]
+    [SerializeField] private GameObject dropPrefab;
+    [SerializeField] [Range(0f, 1f)] private float dropRate = 0.75f;
+
+    [Header("Animation State Names")]
     // Animator에 있는 State 이름과 정확히 같아야 함
     [SerializeField] private string idleStateName = "IdleBattle";
     [SerializeField] private string walkStateName = "WalkFWD";
@@ -43,7 +50,6 @@ public class Slime : MonoBehaviour, IDamageable
     private Animator animator;
 
     // 현재 추적 중인 대상
-    // 싱글 플레이 기준이므로 Photon의 Health 대신 LivingEntity를 탐지 기준으로 사용
     private Transform target;
 
     private int currentHealth;
@@ -56,6 +62,11 @@ public class Slime : MonoBehaviour, IDamageable
     {
         animator = GetComponent<Animator>();
         currentHealth = maxHealth;
+
+        if (whatIsTarget.value == 0)
+        {
+            whatIsTarget = LayerMask.GetMask("Player");
+        }
     }
 
     private void Start()
@@ -98,12 +109,25 @@ public class Slime : MonoBehaviour, IDamageable
         while (!isDead)
         {
             FindTarget();
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
     private void FindTarget()
     {
+        // 1. 현재 조종 중인 활성 캐릭터 우선 탐지
+        if (PlayerController.Instance != null && PlayerController.Instance.CurrentCharacterTransform != null)
+        {
+            Transform activeChar = PlayerController.Instance.CurrentCharacterTransform;
+            float dist = Vector3.Distance(transform.position, activeChar.position);
+            if (dist <= detectRange)
+            {
+                target = activeChar;
+                return;
+            }
+        }
+
+        // 2. 주변 콜라이더 기반 탐색
         Collider[] colliders = new Collider[10];
 
         int count = Physics.OverlapSphereNonAlloc(
@@ -146,6 +170,7 @@ public class Slime : MonoBehaviour, IDamageable
     {
         if (target == null)
             return;
+
         Vector3 targetPosition = target.position;
         targetPosition.y = transform.position.y;
 
@@ -159,8 +184,15 @@ public class Slime : MonoBehaviour, IDamageable
         // 타겟 방향을 바라봄
         transform.rotation = Quaternion.LookRotation(direction);
 
-        // 이미 타겟 방향을 바라보므로 자신의 앞쪽 방향으로 이동
-        transform.position += direction * speed * Time.deltaTime;
+        // 이동 및 지형 스냅
+        Vector3 nextPos = transform.position + direction * speed * Time.deltaTime;
+
+        if (Physics.Raycast(nextPos + Vector3.up * 1.5f, Vector3.down, out RaycastHit hit, 5f, ~LayerMask.GetMask("Player", "Damageable", "Ignore Raycast")))
+        {
+            nextPos.y = hit.point.y;
+        }
+
+        transform.position = nextPos;
 
         // 이동 중에는 걷기 애니메이션 재생
         PlayAnimation(walkStateName);
@@ -194,21 +226,19 @@ public class Slime : MonoBehaviour, IDamageable
             attackState = Random.value > 0.5f ? attackStateName01 : attackStateName02;
         }
 
-        /*
-         * 현재는 데미지 처리 없이 공격 모션만 재생
-         * 
-         * 추후 체력 기능을 붙일 경우,
-         * 이 코루틴 안에서 공격 타이밍에 맞춰
-         * LivingEntity.ApplyDamage()를 호출
-         */
         PlayAnimation(attackState);
+
+        if (attackSound != null)
+        {
+            AudioSource.PlayClipAtPoint(attackSound, transform.position);
+        }
 
         yield return new WaitForSeconds(attackHitDelay);
 
         if (target != null && !isDead)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-            if (distance <= attackRange + 1.0f)
+            if (distance <= attackRange + 1.2f)
             {
                 IDamageable damageable = target.GetComponent<IDamageable>();
                 if (damageable == null)
@@ -235,6 +265,12 @@ public class Slime : MonoBehaviour, IDamageable
             return;
 
         currentHealth -= damage;
+
+        if (hitSound != null)
+        {
+            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+        }
+
         if (currentHealth <= 0)
         {
             Die();
@@ -281,13 +317,6 @@ public class Slime : MonoBehaviour, IDamageable
         animator.CrossFadeInFixedTime(stateName, 0.15f, layerIndex);
     }
 
-    /*
-     * Die()는 외부에서 필요할 때 호출할 수 있도록만 남겨둠
-     * 
-     * 추후 LivingEntity와 연동한다면
-     * 사망 처리 시 이 함수를 호출하거나,
-     * LivingEntity의 사망 이벤트와 연결하면 됨
-     */
     public void Die()
     {
         if (isDead)
@@ -295,19 +324,27 @@ public class Slime : MonoBehaviour, IDamageable
 
         isDead = true;
 
+        // 충돌체 비활성화하여 플레이어가 통과할 수 있도록 함
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = false;
+        }
+
+        // 아이템 드랍
+        if (dropPrefab != null && Random.value <= dropRate)
+        {
+            Instantiate(dropPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+        }
+
         PlayAnimation(dieStateName);
 
         if (Application.isPlaying)
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 3f);
         else
             DestroyImmediate(gameObject);
     }
 
-    /*
-     * Scene 뷰에서 슬라임의 탐지 범위와 공격 범위를 확인하기 위한 기즈모
-     * 노란색: 탐지 범위
-     * 빨간색: 공격 범위
-     */
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;

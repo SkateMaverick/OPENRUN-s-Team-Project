@@ -7,6 +7,9 @@ public class PlayerHealth : LivingEntity
     [Header("Immunity")]
     [SerializeField] private bool isImmune = false;
 
+    [Header("Audio Feedback")]
+    [SerializeField] private AudioClip hitSound;
+
     public bool IsImmune
     {
         get => isImmune;
@@ -37,7 +40,10 @@ public class PlayerHealth : LivingEntity
 
         base.TakeDamage(damage);
         
-        // 애니메이션, ui 등 변경사항
+        if (hitSound != null)
+        {
+            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+        }
     }
 
     // 플레이어가 체력이 다했을 때의 처리
