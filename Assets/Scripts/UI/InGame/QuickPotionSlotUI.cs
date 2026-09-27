@@ -12,8 +12,8 @@ public class QuickPotionSlotUI : MonoBehaviour
     [Header("Potion Settings")]
     [SerializeField] private PotionItemData activePotion;
     [SerializeField] private KeyCode hotkey = KeyCode.Z;
-    [SerializeField] private bool grantStarterPotionsIfEmpty = true;
-    [SerializeField] private int starterPotionAmount = 10;
+    [SerializeField] private bool grantStarterPotionsIfEmpty = false;
+    [SerializeField] private int starterPotionAmount = 0;
 
     [Header("UI Element References")]
     [SerializeField] private Image slotBackground;

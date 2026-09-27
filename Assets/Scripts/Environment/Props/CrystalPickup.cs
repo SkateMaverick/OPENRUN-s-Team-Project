@@ -18,6 +18,8 @@ public class CrystalPickup : MonoBehaviour
     [SerializeField] private float interactionRange = 4.5f;
     [SerializeField] private float verticalTolerance = 5.0f;
     [SerializeField] private bool destroyOnInteract = true;
+    [Tooltip("If true and a dialogue cutscene is playing, waits until dialogue finishes before destroying.")]
+    [SerializeField] private bool destroyAfterDialogue = true;
     [SerializeField] private bool interactOnce = false;
 
     [Header("Audio & Effects")]
@@ -52,7 +54,7 @@ public class CrystalPickup : MonoBehaviour
 
     private void Update()
     {
-        if (interactOnce && _isPickedUp) return;
+        if (_isPickedUp && (interactOnce || destroyOnInteract)) return;
 
         // Hide prompt while dialogue is playing
         if (DialogueCutsceneManager.Instance != null && DialogueCutsceneManager.Instance.IsDialogueActive)
@@ -169,7 +171,14 @@ public class CrystalPickup : MonoBehaviour
 
         if (destroyOnInteract)
         {
-            Destroy(gameObject);
+            if (destroyAfterDialogue && DialogueCutsceneManager.Instance != null && DialogueCutsceneManager.Instance.IsDialogueActive)
+            {
+                StartCoroutine(DestroyAfterDialogueRoutine());
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         else
         {
@@ -177,6 +186,20 @@ public class CrystalPickup : MonoBehaviour
             {
                 StartCoroutine(ResetInteractionAfterDialogue());
             }
+        }
+    }
+
+    private System.Collections.IEnumerator DestroyAfterDialogueRoutine()
+    {
+        yield return null;
+        while (DialogueCutsceneManager.Instance != null && DialogueCutsceneManager.Instance.IsDialogueActive)
+        {
+            yield return null;
+        }
+        yield return null;
+        if (gameObject != null)
+        {
+            Destroy(gameObject);
         }
     }
 

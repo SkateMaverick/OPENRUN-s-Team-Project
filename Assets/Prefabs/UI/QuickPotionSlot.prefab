@@ -932,8 +932,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::QuickPotionSlotUI
   activePotion: {fileID: 11400000, guid: e630bfed45d47a64b991ac26031f917c, type: 2}
   hotkey: 122
-  grantStarterPotionsIfEmpty: 1
-  starterPotionAmount: 10
+  grantStarterPotionsIfEmpty: 0
+  starterPotionAmount: 0
   slotBackground: {fileID: 1328839962510866575}
   potionIcon: {fileID: 7672012594276929634}
   healBadge: {fileID: 5693075626619348483}

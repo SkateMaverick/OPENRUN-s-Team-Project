@@ -105,6 +105,15 @@ public class IntroWalkCutsceneController : MonoBehaviour
 
         if (playOnStart)
         {
+            // Immediately disable player control if cutscene will play
+            if (!CheckIsDungeonReturn() && !HasPlayedFirstIntro)
+            {
+                if (_playerController != null)
+                {
+                    _playerController.enabled = false;
+                }
+            }
+
             StartCoroutine(StartCutsceneDelayedRoutine());
         }
     }
@@ -181,10 +190,13 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (que != null)
         {
             float groundY = GetGroundY(pathCenterX, targetZQue, que.position.y);
-            que.position = new Vector3(pathCenterX, groundY, targetZQue);
+            Vector3 arrivalPos = new Vector3(pathCenterX, groundY, targetZQue);
+            que.position = arrivalPos;
             que.rotation = Quaternion.LookRotation(Vector3.forward);
             if (_queRb != null)
             {
+                _queRb.position = arrivalPos;
+                _queRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _queRb.linearVelocity = Vector3.zero;
                 _queRb.angularVelocity = Vector3.zero;
             }
@@ -193,10 +205,13 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (noa != null)
         {
             float groundY = GetGroundY(pathCenterX, targetZNoa, noa.position.y);
-            noa.position = new Vector3(pathCenterX, groundY, targetZNoa);
+            Vector3 arrivalPos = new Vector3(pathCenterX, groundY, targetZNoa);
+            noa.position = arrivalPos;
             noa.rotation = Quaternion.LookRotation(Vector3.forward);
             if (_noaRb != null)
             {
+                _noaRb.position = arrivalPos;
+                _noaRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _noaRb.linearVelocity = Vector3.zero;
                 _noaRb.angularVelocity = Vector3.zero;
             }
@@ -269,32 +284,40 @@ public class IntroWalkCutsceneController : MonoBehaviour
     private IControllable _noaControllable;
     private IControllable _queControllable;
 
+    private float _cutsceneStartTime = 0f;
+    private const float CUTSCENE_TIMEOUT_SECONDS = 7.0f;
+
     private void FixedUpdate()
     {
         if (!_isCutsceneActive || _hasArrived)
             return;
+
+        // Safety timeout to prevent getting stuck
+        if (Time.time - _cutsceneStartTime > CUTSCENE_TIMEOUT_SECONDS)
+        {
+            _hasArrived = true;
+            if (_queRb != null) _queRb.linearVelocity = Vector3.zero;
+            if (_noaRb != null) _noaRb.linearVelocity = Vector3.zero;
+            StartCoroutine(ArrivalRoutine());
+            return;
+        }
 
         // 1. Move Que (Front)
         if (que != null)
         {
             if (que.position.z < targetZQue)
             {
-                if (_queControllable != null)
+                Vector3 moveDir = GetSlopeForward(que.position, que);
+                Vector3 targetVel = moveDir * walkSpeed;
+                float xDiff = (pathCenterX - que.position.x) * 4f;
+                if (_queRb != null)
                 {
-                    _queControllable.HandleCharacterControl(new Vector2(0f, 0.45f), false);
-                }
-                else if (_queRb != null)
-                {
-                    Vector3 moveDir = GetSlopeForward(que.position, que);
-                    Vector3 targetVel = moveDir * walkSpeed;
-                    float xDiff = (pathCenterX - que.position.x) * 3f;
                     _queRb.linearVelocity = new Vector3(xDiff, _queRb.linearVelocity.y, targetVel.z);
-                    que.rotation = Quaternion.Slerp(que.rotation, Quaternion.LookRotation(Vector3.forward), Time.fixedDeltaTime * 12f);
                 }
+                que.rotation = Quaternion.Slerp(que.rotation, Quaternion.LookRotation(Vector3.forward), Time.fixedDeltaTime * 12f);
             }
             else
             {
-                if (_queControllable != null) _queControllable.HandleCharacterControl(Vector2.zero, false);
                 if (_queRb != null) _queRb.linearVelocity = new Vector3(0f, _queRb.linearVelocity.y, 0f);
             }
         }
@@ -304,22 +327,17 @@ public class IntroWalkCutsceneController : MonoBehaviour
         {
             if (noa.position.z < targetZNoa)
             {
-                if (_noaControllable != null)
+                Vector3 moveDir = GetSlopeForward(noa.position, noa);
+                Vector3 targetVel = moveDir * walkSpeed;
+                float xDiff = (pathCenterX - noa.position.x) * 4f;
+                if (_noaRb != null)
                 {
-                    _noaControllable.HandleCharacterControl(new Vector2(0f, 0.45f), false);
-                }
-                else if (_noaRb != null)
-                {
-                    Vector3 moveDir = GetSlopeForward(noa.position, noa);
-                    Vector3 targetVel = moveDir * walkSpeed;
-                    float xDiff = (pathCenterX - noa.position.x) * 3f;
                     _noaRb.linearVelocity = new Vector3(xDiff, _noaRb.linearVelocity.y, targetVel.z);
-                    noa.rotation = Quaternion.Slerp(noa.rotation, Quaternion.LookRotation(Vector3.forward), Time.fixedDeltaTime * 12f);
                 }
+                noa.rotation = Quaternion.Slerp(noa.rotation, Quaternion.LookRotation(Vector3.forward), Time.fixedDeltaTime * 12f);
             }
             else
             {
-                if (_noaControllable != null) _noaControllable.HandleCharacterControl(Vector2.zero, false);
                 if (_noaRb != null) _noaRb.linearVelocity = new Vector3(0f, _noaRb.linearVelocity.y, 0f);
             }
         }
@@ -331,8 +349,16 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (queArrived && noaArrived)
         {
             _hasArrived = true;
-            if (_queControllable != null) _queControllable.HandleCharacterControl(Vector2.zero, false);
-            if (_noaControllable != null) _noaControllable.HandleCharacterControl(Vector2.zero, false);
+            if (_queRb != null)
+            {
+                _queRb.linearVelocity = Vector3.zero;
+                _queRb.angularVelocity = Vector3.zero;
+            }
+            if (_noaRb != null)
+            {
+                _noaRb.linearVelocity = Vector3.zero;
+                _noaRb.angularVelocity = Vector3.zero;
+            }
             StartCoroutine(ArrivalRoutine());
         }
     }
@@ -343,6 +369,7 @@ public class IntroWalkCutsceneController : MonoBehaviour
 
         _isCutsceneActive = true;
         _hasArrived = false;
+        _cutsceneStartTime = Time.time;
 
         // Disable player manipulation
         if (_playerController != null)
@@ -365,10 +392,13 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (que != null)
         {
             float groundY = GetGroundY(pathCenterX, startZQue, que.position.y);
-            que.position = new Vector3(pathCenterX, groundY, startZQue);
+            Vector3 startPos = new Vector3(pathCenterX, groundY, startZQue);
+            que.position = startPos;
             que.rotation = Quaternion.LookRotation(Vector3.forward);
             if (_queRb != null)
             {
+                _queRb.position = startPos;
+                _queRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _queRb.linearVelocity = Vector3.zero;
                 _queRb.angularVelocity = Vector3.zero;
             }
@@ -377,20 +407,29 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (noa != null)
         {
             float groundY = GetGroundY(pathCenterX, startZNoa, noa.position.y);
-            noa.position = new Vector3(pathCenterX, groundY, startZNoa);
+            Vector3 startPos = new Vector3(pathCenterX, groundY, startZNoa);
+            noa.position = startPos;
             noa.rotation = Quaternion.LookRotation(Vector3.forward);
             if (_noaRb != null)
             {
+                _noaRb.position = startPos;
+                _noaRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _noaRb.linearVelocity = Vector3.zero;
                 _noaRb.angularVelocity = Vector3.zero;
             }
         }
 
-        // Ensure NoaCam is tracking Noa
-        if (noaCam != null && noa != null)
+        // Ensure NoaCam is tracking Noa and oriented forward along path
+        if (noaCam != null)
         {
             noaCam.gameObject.SetActive(true);
-            noaCam.Target.TrackingTarget = noa;
+            if (noa != null) noaCam.Target.TrackingTarget = noa;
+
+            var orbital = noaCam.GetComponent<CinemachineOrbitalFollow>();
+            if (orbital != null)
+            {
+                orbital.HorizontalAxis.Value = 0f;
+            }
         }
 
         onCutsceneStart?.Invoke();
@@ -496,30 +535,52 @@ public class IntroWalkCutsceneController : MonoBehaviour
     {
         Vector3 rayOrigin = currentPos + Vector3.up * 1.5f;
         RaycastHit[] hits = Physics.RaycastAll(rayOrigin, Vector3.down, 4.0f, groundLayer);
+        float bestDist = float.MaxValue;
+        Vector3 groundNormal = Vector3.up;
+        bool found = false;
+
         foreach (var hit in hits)
         {
             if (hit.collider.isTrigger) continue;
             if (character != null && (hit.collider.transform == character || hit.collider.transform.IsChildOf(character)))
                 continue;
 
-            return Vector3.ProjectOnPlane(Vector3.forward, hit.normal).normalized;
+            if (hit.distance < bestDist)
+            {
+                bestDist = hit.distance;
+                groundNormal = hit.normal;
+                found = true;
+            }
+        }
+        if (found)
+        {
+            return Vector3.ProjectOnPlane(Vector3.forward, groundNormal).normalized;
         }
         return Vector3.forward;
     }
 
     private float GetGroundY(float x, float z, float defaultY)
     {
-        Vector3 rayOrigin = new Vector3(x, 10f, z);
-        RaycastHit[] hits = Physics.RaycastAll(rayOrigin, Vector3.down, 20f, groundLayer);
+        Vector3 rayOrigin = new Vector3(x, 15f, z);
+        RaycastHit[] hits = Physics.RaycastAll(rayOrigin, Vector3.down, 30f, groundLayer);
+        float bestDist = float.MaxValue;
+        float groundY = defaultY;
+        bool found = false;
+
         foreach (var hit in hits)
         {
             if (hit.collider.isTrigger) continue;
             if (noa != null && (hit.collider.transform == noa || hit.collider.transform.IsChildOf(noa))) continue;
             if (que != null && (hit.collider.transform == que || hit.collider.transform.IsChildOf(que))) continue;
 
-            return hit.point.y + 0.1f;
+            if (hit.distance < bestDist)
+            {
+                bestDist = hit.distance;
+                groundY = hit.point.y + 0.1f;
+                found = true;
+            }
         }
-        return defaultY;
+        return found ? groundY : defaultY;
     }
 
     private void FindReferencesIfNull()
