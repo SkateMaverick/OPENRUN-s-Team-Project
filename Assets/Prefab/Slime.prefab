@@ -138,6 +138,12 @@ MonoBehaviour:
   attackCooldown: 1.5
   attackMotionTime: 1.3
   randomAttackMotion: 1
+  attackSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  dropSound: {fileID: 8300000, guid: 964fee8d128790e45856d1addf64ab2c, type: 3}
+  dropSoundVolume: 1
+  dropPrefab: {fileID: 1885690973802633347, guid: 1ff10a3c47d93f04991a6328d7e20a45, type: 3}
+  dropRate: 0.75
   idleStateName: IdleBattle
   walkStateName: WalkFWD
   attackStateName01: Attack01

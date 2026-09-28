@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -26,6 +27,14 @@ public class Portal : MonoBehaviour
     [SerializeField] private bool requireCrystal = false;
     [SerializeField] private ItemData requiredItem;
     [SerializeField] private string lockedNoticeText = "생명의 수정이 필요합니다";
+
+    [Header("Dialogue Before Teleport (Optional)")]
+    [Tooltip("텔레포트 전 대화를 재생할지 여부")]
+    [SerializeField] private bool playDialogueBeforeTeleport = false;
+    [Tooltip("대화 시퀀스 에셋. 비어있으면 inlineDialogueLines 또는 기본 대사를 사용합니다.")]
+    [SerializeField] private DialogueSequence dialogueSequence;
+    [Tooltip("인라인 대화 목록.")]
+    [SerializeField] private List<DialogueLine> inlineDialogueLines = new List<DialogueLine>();
 
     private bool _hasTriggered = false;
     private bool _inRange = false;
@@ -177,6 +186,47 @@ public class Portal : MonoBehaviour
             return;
         }
 
+        if (playDialogueBeforeTeleport && DialogueCutsceneManager.Instance != null)
+        {
+            StartDialogueAndTeleport();
+            return;
+        }
+
+        DoTeleport();
+    }
+
+    private void StartDialogueAndTeleport()
+    {
+        if (_hasTriggered) return;
+        _hasTriggered = true;
+
+        if (InteractionPromptUI.Instance != null)
+        {
+            InteractionPromptUI.Instance.HidePrompt(this);
+        }
+        _inRange = false;
+
+        if (dialogueSequence != null && dialogueSequence.lines != null && dialogueSequence.lines.Count > 0)
+        {
+            DialogueCutsceneManager.Instance.StartDialogue(dialogueSequence, DoTeleport);
+        }
+        else if (inlineDialogueLines != null && inlineDialogueLines.Count > 0)
+        {
+            DialogueCutsceneManager.Instance.StartDialogue(inlineDialogueLines, DoTeleport);
+        }
+        else
+        {
+            var defaultLines = new List<DialogueLine>
+            {
+                new DialogueLine("Que", "여기가 작은돌이 말한 그곳인가봐", new Color(1.0f, 0.85f, 0.35f, 1.0f)),
+                new DialogueLine("Noa", "좋아 그럼 한번 같이 들어가보자고", new Color(0.35f, 0.75f, 1.0f, 1.0f))
+            };
+            DialogueCutsceneManager.Instance.StartDialogue(defaultLines, DoTeleport);
+        }
+    }
+
+    private void DoTeleport()
+    {
         if (!string.IsNullOrEmpty(targetSceneName))
         {
             _hasTriggered = true;

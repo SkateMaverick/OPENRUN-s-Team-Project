@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828d97c8aa6051b4bb7f2d1d306581bb, type: 3}
+  m_Name: Dungeon1ClearSlimesDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  sequenceTitle: Dungeon 1 Clear Slimes
+  lines:
+  - speakerName: Que
+    speakerColor: {r: 1, g: 0.85, b: 0.35, a: 1}
+    dialogueText: "\uC88B\uC544 \uADF8\uB7EC\uBA74 \uB2E4\uC74C \uAD6C\uC5ED\uC73C\uB85C
+      \uAC00\uBCF4\uC790"
+    voiceClip: {fileID: 0}
+    cameraFocus: {fileID: 0}
+  - speakerName: Noa
+    speakerColor: {r: 0.35, g: 0.75, b: 1, a: 1}
+    dialogueText: "\uC73D, \uB108\uBB34 \uC881\uC544\uC11C \uB09C \uBABB\uAC00\uACA0\uC5B4"
+    voiceClip: {fileID: 0}
+    cameraFocus: {fileID: 0}
+  - speakerName: Que
+    speakerColor: {r: 1, g: 0.85, b: 0.35, a: 1}
+    dialogueText: "\uC54C\uACA0\uC5B4! \uADF8\uB7EC\uBA74 \uB0B4\uAC00 \uD55C\uBC88
+      \uAC00\uBCFC\uAC8C"
+    voiceClip: {fileID: 0}
+    cameraFocus: {fileID: 0}

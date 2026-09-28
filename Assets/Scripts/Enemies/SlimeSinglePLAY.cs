@@ -29,6 +29,9 @@ public class SlimeSinglePlay : MonoBehaviour, IDamageable
     private bool _isAttacking;
     private float _lastAttackTime;
 
+    public bool IsDead => _isDead;
+    public event System.Action OnDeath;
+
     private bool HasTarget => _target != null && !_isDead;
 
     private void Awake()
@@ -46,6 +49,14 @@ public class SlimeSinglePlay : MonoBehaviour, IDamageable
     {
         if (_isDead)
             return;
+
+        // 대화 컷신 진행 중에는 슬라임 정지
+        if (DialogueCutsceneManager.Instance != null && DialogueCutsceneManager.Instance.IsDialogueActive)
+        {
+            if (_animator != null)
+                _animator.SetBool("HasTarget", false);
+            return;
+        }
 
         if (_isAttacking)
             return;
@@ -169,7 +180,7 @@ public class SlimeSinglePlay : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(attackHitDelay);
 
-        if (_target != null && !_isDead)
+        if (_target != null && !_isDead && enabled)
         {
             float distance = Vector3.Distance(transform.position, _target.position);
             if (distance <= attackRange + 1.0f)
@@ -223,7 +234,7 @@ public class SlimeSinglePlay : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        if (_isDead)
+        if (_isDead || !enabled)
             return;
 
         currentHealth -= damage;
@@ -234,18 +245,62 @@ public class SlimeSinglePlay : MonoBehaviour, IDamageable
         }
     }
 
-    private void Die()
+    [Header("Drop Settings")]
+    [SerializeField] private GameObject dropPrefab;
+    [SerializeField, Range(0f, 1f)] private float dropRate = 0.75f;
+    [SerializeField] private AudioClip dropSound;
+    [SerializeField, Range(0f, 1f)] private float dropSoundVolume = 1.0f;
+    private bool _hasDroppedItem = false;
+
+    public void Die()
     {
         if (_isDead)
             return;
 
         _isDead = true;
+        _isAttacking = false;
+        _target = null;
 
+        OnDeath?.Invoke();
+
+        // 1. 모든 코루틴 즉시 중단 (공격 루틴 등 진행 중인 동작 완전 정지)
+        StopAllCoroutines();
+
+        // 2. 충돌체 즉시 비활성화 (시체가 피격되거나 길을 막지 않도록)
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        foreach (var col in colliders)
+        {
+            col.enabled = false;
+        }
+
+        // 3. 아이템 드랍
+        if (!_hasDroppedItem && dropPrefab != null && Random.value <= dropRate)
+        {
+            _hasDroppedItem = true;
+            Vector3 dropPosition = transform.position + Vector3.up * 0.5f;
+            Instantiate(dropPrefab, dropPosition, Quaternion.identity);
+
+            AudioClip sound = dropSound != null ? dropSound : Resources.Load<AudioClip>("Audio/item drop");
+            if (sound != null)
+            {
+                AudioSource.PlayClipAtPoint(sound, dropPosition, dropSoundVolume);
+            }
+        }
+
+        // 4. 애니메이션 사망 처리
         if (_animator != null)
+        {
+            _animator.SetBool("HasTarget", false);
+            _animator.ResetTrigger("Die");
             _animator.SetTrigger("Die");
+            _animator.CrossFadeInFixedTime("Die", 0.1f);
+        }
+
+        // 5. 컴포넌트 비활성화
+        enabled = false;
 
         if (Application.isPlaying)
-            Destroy(gameObject, 5f);
+            Destroy(gameObject, 3f);
         else
             DestroyImmediate(gameObject);
     }

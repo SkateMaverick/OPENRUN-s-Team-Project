@@ -27,6 +27,9 @@ public class WalkingIK : MonoBehaviour
     // false: x축만 반전시켜 오른발 리드 포즈로 변환해 사용 (첫 포즈에서 오른발이 먼저 앞으로 나감)
     private bool _leftLegLeads;
 
+    public event Action OnStepTaken;
+    private int _stepPhase = -1;
+
     // IK 움직임 시작
     public void ActivateIK() => _targetWeight = 1f;
     // IK 움직임 중지
@@ -46,6 +49,11 @@ public class WalkingIK : MonoBehaviour
         _leftLegLeads = Random.Range(0, 2) == 0; // 어느 발부터 내밀지 
     }
 
+    private void OnDisable()
+    {
+        _stepPhase = -1;
+    }
+
     private void LateUpdate()
     {
         // 정확히 도달해야 하기 때문에 Lerp 대신 MvoeTowards
@@ -55,13 +63,38 @@ public class WalkingIK : MonoBehaviour
         rightLegIK.weight = _currentWeight;
         
         // _currentWeight가 0이면 ik 움직임이 없어야 하기 때문에
-        if (_currentWeight <= 0f) return;
+        if (_currentWeight <= 0f)
+        {
+            _stepPhase = -1;
+            return;
+        }
         
         WalkPoseSet.WalkKeyframe[] keyframes = poseSet.keyframes;
 
         // 수평 속도만 사용. y를 빼는 이유는 낙하나 상승 중에 다리가 움직이면 어색하기 때문
         Vector3 velocity = _rigidbody.linearVelocity;
         float horizontalSpeed = new Vector2(velocity.x, velocity.z).magnitude;
+
+        // 속도가 멈추면 스텝 페이즈 리셋
+        if (horizontalSpeed < 0.1f)
+        {
+            _stepPhase = -1;
+        }
+        else if (_currentWeight > 0.1f)
+        {
+            float stepThreshold = _keyframeEndTimes != null && _keyframeEndTimes.Length > 1 ? _keyframeEndTimes[1] : (_cycleDuration * 0.5f);
+            int currentPhase = (_elapsedTime >= stepThreshold) ? 1 : 0;
+            if (_stepPhase == -1)
+            {
+                _stepPhase = currentPhase;
+                OnStepTaken?.Invoke();
+            }
+            else if (_stepPhase != currentPhase)
+            {
+                _stepPhase = currentPhase;
+                OnStepTaken?.Invoke();
+            }
+        }
 
         // 시간이 아니라 이동한 거리에 비례해 사이클을 진행시킴
         // 속도 0 -> 위상 정지(다리 멈춤), 속도가 referenceSpeed의 2배 -> 걸음도 2배 빠르게

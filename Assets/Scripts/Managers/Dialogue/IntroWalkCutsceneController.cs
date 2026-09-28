@@ -499,6 +499,11 @@ public class IntroWalkCutsceneController : MonoBehaviour
         PlayerPrefs.DeleteKey("IntroCutscene_Played");
 
         onCutsceneComplete?.Invoke();
+
+        if (!CheckIsDungeonReturn() && ChapterTitleCardUI.Instance != null)
+        {
+            ChapterTitleCardUI.Instance.PlayChapterIntro();
+        }
     }
 
     private void SetGameplayUIVisibility(bool visible)

@@ -69,8 +69,29 @@ public class QuickPotionSlotUI : MonoBehaviour
 
     private void Start()
     {
+        BindInventory();
+        RefreshDisplay();
+    }
+
+    private void OnEnable()
+    {
+        BindInventory();
+        RefreshDisplay();
+    }
+
+    private void OnDisable()
+    {
         if (InventoryManager.Instance != null)
         {
+            InventoryManager.Instance.onInventoryChanged -= RefreshDisplay;
+        }
+    }
+
+    private void BindInventory()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.onInventoryChanged -= RefreshDisplay;
             InventoryManager.Instance.onInventoryChanged += RefreshDisplay;
 
             if (grantStarterPotionsIfEmpty && activePotion != null)
@@ -81,8 +102,6 @@ public class QuickPotionSlotUI : MonoBehaviour
                 }
             }
         }
-
-        RefreshDisplay();
     }
 
     private void OnDestroy()

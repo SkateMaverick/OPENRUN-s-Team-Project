@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,6 +13,12 @@ public class InventoryManager : MonoBehaviour
             if (_instance == null)
             {
                 _instance = FindFirstObjectByType<InventoryManager>();
+
+                if (_instance == null && Application.isPlaying)
+                {
+                    GameObject go = new GameObject("InventoryManager");
+                    _instance = go.AddComponent<InventoryManager>();
+                }
             }
             return _instance;
         }
@@ -39,6 +45,11 @@ public class InventoryManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
+            if (transform.parent != null)
+            {
+                transform.SetParent(null);
+            }
+            DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
@@ -172,7 +183,7 @@ public class InventoryManager : MonoBehaviour
         }
 
         onInventoryChanged?.Invoke();
-        Debug.Log("�κ��丮�� ���� á���ϴ�.");
+        Debug.Log("인벤토리가 가득 찼습니다.");
         return false;
     }
 }

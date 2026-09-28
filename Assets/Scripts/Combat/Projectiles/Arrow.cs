@@ -50,17 +50,39 @@ public class Arrow : MonoBehaviour, IProjectile
     {
         if (((1 << hitObj.layer) & whatIsTarget) != 0)
         {
-            IDamageable damageable = hitObj.GetComponent<IDamageable>();
-            if (damageable == null)
-            {
-                damageable = hitObj.GetComponentInParent<IDamageable>();
-            }
+            IDamageable damageable = GetActiveDamageable(hitObj);
 
             if (damageable != null)
             {
                 damageable.TakeDamage(attackDamage);
             }
         }
+    }
+
+    private IDamageable GetActiveDamageable(GameObject target)
+    {
+        if (target == null) return null;
+
+        var damageables = target.GetComponents<IDamageable>();
+        foreach (var d in damageables)
+        {
+            if (d is Behaviour b && !b.isActiveAndEnabled)
+                continue;
+            return d;
+        }
+
+        var parentDamageables = target.GetComponentsInParent<IDamageable>();
+        foreach (var d in parentDamageables)
+        {
+            if (d is Behaviour b && !b.isActiveAndEnabled)
+                continue;
+            return d;
+        }
+
+        if (damageables.Length > 0) return damageables[0];
+        if (parentDamageables.Length > 0) return parentDamageables[0];
+
+        return null;
     }
 
     public void Launch(float speed)

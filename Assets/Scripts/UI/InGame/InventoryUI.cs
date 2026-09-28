@@ -9,16 +9,15 @@ public class InventoryUI : MonoBehaviour
 
     private void Start()
     {
-        if (InventoryManager.Instance != null)
-        {
-            InventoryManager.Instance.onInventoryChanged += Refresh;
-        }
-
+        BindInventory();
         Refresh();
     }
 
     private void OnEnable()
     {
+        BindInventory();
+        Refresh();
+
         if (UIStateManager.Instance != null)
         {
             UIStateManager.Instance.OpenUI(UI_KEY);
@@ -27,6 +26,15 @@ public class InventoryUI : MonoBehaviour
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+        }
+    }
+
+    private void BindInventory()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.onInventoryChanged -= Refresh;
+            InventoryManager.Instance.onInventoryChanged += Refresh;
         }
     }
 

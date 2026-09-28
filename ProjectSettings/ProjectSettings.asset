@@ -898,11 +898,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: da8d789d-3da1-4734-b2dd-7429a70453f0
+  cloudProjectId: a37caf98-ab98-4c53-af5c-6798338996db
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: OPENRUN-s-Team-Project (1)
-  organizationId: myoungran12
+  projectName: OPENRUN-s-Team-Project
+  organizationId: polokim2222
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

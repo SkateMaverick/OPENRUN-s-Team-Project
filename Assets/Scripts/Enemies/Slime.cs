@@ -34,6 +34,8 @@ public class Slime : MonoBehaviour, IDamageable
     [Header("Audio Feedback")]
     [SerializeField] private AudioClip attackSound;
     [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip dropSound;
+    [SerializeField, Range(0f, 1f)] private float dropSoundVolume = 1.0f;
 
     [Header("Drop Settings")]
     [SerializeField] private GameObject dropPrefab;
@@ -235,7 +237,7 @@ public class Slime : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(attackHitDelay);
 
-        if (target != null && !isDead)
+        if (target != null && !isDead && enabled)
         {
             float distance = Vector3.Distance(transform.position, target.position);
             if (distance <= attackRange + 1.2f)
@@ -261,7 +263,7 @@ public class Slime : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        if (isDead)
+        if (isDead || !enabled)
             return;
 
         currentHealth -= damage;
@@ -323,21 +325,43 @@ public class Slime : MonoBehaviour, IDamageable
             return;
 
         isDead = true;
+        isAttacking = false;
+        target = null;
 
-        // 충돌체 비활성화하여 플레이어가 통과할 수 있도록 함
+        // 1. 모든 코루틴 즉시 중단
+        StopAllCoroutines();
+
+        // 2. 동일 오브젝트에 SlimeSinglePlay가 있을 경우 함께 사망 처리
+        var singlePlay = GetComponent<SlimeSinglePlay>();
+        if (singlePlay != null && singlePlay.enabled)
+        {
+            singlePlay.Die();
+        }
+
+        // 3. 충돌체 비활성화하여 플레이어가 통과할 수 있도록 함
         Collider[] colliders = GetComponentsInChildren<Collider>();
         foreach (var col in colliders)
         {
             col.enabled = false;
         }
 
-        // 아이템 드랍
+        // 4. 아이템 드랍
         if (dropPrefab != null && Random.value <= dropRate)
         {
-            Instantiate(dropPrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+            Vector3 dropPosition = transform.position + Vector3.up * 0.5f;
+            Instantiate(dropPrefab, dropPosition, Quaternion.identity);
+
+            AudioClip sound = dropSound != null ? dropSound : Resources.Load<AudioClip>("Audio/item drop");
+            if (sound != null)
+            {
+                AudioSource.PlayClipAtPoint(sound, dropPosition, dropSoundVolume);
+            }
         }
 
         PlayAnimation(dieStateName);
+
+        // 5. 컴포넌트 비활성화
+        enabled = false;
 
         if (Application.isPlaying)
             Destroy(gameObject, 3f);

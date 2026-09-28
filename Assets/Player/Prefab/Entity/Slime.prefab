@@ -136,6 +136,8 @@ MonoBehaviour:
   randomAttackMotion: 1
   attackSound: {fileID: 8300000, guid: e85ecb368b140024e94567df6ca03d1c, type: 3}
   hitSound: {fileID: 8300000, guid: 3559a9d1ef02f7d4b94b40e28e21d760, type: 3}
+  dropSound: {fileID: 8300000, guid: 964fee8d128790e45856d1addf64ab2c, type: 3}
+  dropSoundVolume: 1
   dropPrefab: {fileID: 1885690973802633347, guid: 1ff10a3c47d93f04991a6328d7e20a45, type: 3}
   dropRate: 0.75
   idleStateName: IdleBattle

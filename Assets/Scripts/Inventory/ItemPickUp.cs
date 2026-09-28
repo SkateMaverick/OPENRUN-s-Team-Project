@@ -43,8 +43,28 @@ public class ItemPickup : MonoBehaviour
             transform.position = new Vector3(transform.position.x, newY, transform.position.z);
         }
 
-        if (!requireInteraction || _isPickedUp)
+        if (_isPickedUp)
             return;
+
+        // Auto-pickup proximity check when requireInteraction is false
+        if (!requireInteraction)
+        {
+            Transform pTransform = GetActivePlayerTransform();
+            if (pTransform != null)
+            {
+                Vector3 pPos = pTransform.position;
+                Vector3 myP = transform.position;
+                float hDist = Vector2.Distance(new Vector2(pPos.x, pPos.z), new Vector2(myP.x, myP.z));
+                float vDist = Mathf.Abs(pPos.y - myP.y);
+
+                if (hDist <= 2.0f && vDist <= 3.0f)
+                {
+                    PickUp();
+                    return;
+                }
+            }
+            return;
+        }
 
         // Hide prompt while dialogue is active
         if (DialogueCutsceneManager.Instance != null && DialogueCutsceneManager.Instance.IsDialogueActive)
@@ -152,9 +172,17 @@ public class ItemPickup : MonoBehaviour
             AudioSource.PlayClipAtPoint(pickupSound, transform.position, 1.0f);
         }
 
-        if (itemData != null && InventoryManager.Instance != null)
+        if (itemData != null)
         {
-            InventoryManager.Instance.AddItem(itemData, amount);
+            if (InventoryManager.Instance != null)
+            {
+                InventoryManager.Instance.AddItem(itemData, amount);
+                Debug.Log($"[ItemPickup] Added {amount}x {itemData.itemName} to inventory.");
+            }
+            else
+            {
+                Debug.LogError($"[ItemPickup] InventoryManager.Instance is null! Could not add {itemData.itemName}");
+            }
         }
 
         if (dialogueSequence != null && DialogueCutsceneManager.Instance != null)
@@ -170,10 +198,31 @@ public class ItemPickup : MonoBehaviour
         if (requireInteraction)
             return;
 
-        if (!other.CompareTag("Player"))
+        if (!IsPlayer(other))
             return;
 
         PickUp();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (requireInteraction)
+            return;
+
+        if (!IsPlayer(other))
+            return;
+
+        PickUp();
+    }
+
+    private bool IsPlayer(Collider other)
+    {
+        if (other == null) return false;
+        if (other.CompareTag("Player")) return true;
+        if (other.transform.root != null && other.transform.root.CompareTag("Player")) return true;
+        if (other.GetComponentInParent<PlayerController>() != null) return true;
+        if (other.GetComponentInParent<IControllable>() != null) return true;
+        return false;
     }
 
     private Transform GetActivePlayerTransform()
