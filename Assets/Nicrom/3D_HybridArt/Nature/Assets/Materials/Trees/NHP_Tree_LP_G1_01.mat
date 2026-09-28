@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NHP_Tree_LP_G1_01
+  m_Shader: {fileID: 4800000, guid: 456879bc4c5cf2042b35700e494bdf0b, type: 3}
+  m_Parent: {fileID: 2100000, guid: bdd2e6d0ded64ad4f93e6f27cdbb848d, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _ENABLEHORIZONTALBENDING_ON
+  - _ENABLEVERTICALBENDING_ON
+  m_InvalidKeywords:
+  - _ENABLEHORIZONTALMOVEMENT_ON
+  - _ENABLEMAINBENDING_ON
+  - _ENABLEVERTICALMOVEMENT_ON
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _NoiseTexture:
+        m_Texture: {fileID: 2800000, guid: 512fa11ad89d84543ad8d6c8d9cb6743, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _DBHorizontalFrequency: 1.1
+    - _DBVerticalAmplitude: 4
+    - _DBVerticalAmplitudeOffset: 1.2
+    - _DBVerticalFrequency: 1.5
+    - _EnableHorizontalBending: 1
+    - _EnableVerticalBending: 1
+    - _EnableVerticalMovement: 1
+    - _MBAmplitude: 3
+    - _MBFrequency: 0.5
+    - _MBFrequencyOffset: 0.2
+    - _MBMaxHeight: 7
+    - _MBPhase: 2
+    - _MBWindDir: 0
+    - _MBWindDirFrequency: 0.2
+    - _MBWindDirOffset: 82
+    - _MBWindDirVariation: 20
+    - _MBWindDirectionOffset: 20
+    m_Colors:
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _MBPhaseShiftNoiseTiling: {r: 5, g: 4, b: 0, a: 0}
+    - _MBWindDirChangeSpeed: {r: 0.1, g: 0.1, b: 0, a: 0}
+    - _MBWindDirOffsetNoiseTiling: {r: 1, g: 1, b: 0, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

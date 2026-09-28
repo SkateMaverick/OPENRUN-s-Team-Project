@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 59b73456e03e64048b69d7b3c20b38c9
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Shaders/ASE/NHP_LowPolyTreeWithPatterns.shader
+  uploadId: 763345

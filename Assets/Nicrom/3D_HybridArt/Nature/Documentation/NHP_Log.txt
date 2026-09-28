@@ -1,0 +1,26 @@
+Release Notes:
+
+v1.1.4
+- Added support for Unity 6.1 
+- Removed support for Unity 2021.3
+
+v1.1.3
+	- Updated the shaders
+	- Removed support for non LTS versions of Unity lower than Unity 6
+
+v1.1.2
+	- Added support for Unity 6
+
+v1.1.1
+	- Added support for Unity 2023.1
+
+v1.1.0
+	- Added support for HDRP pipeline.
+	- Changed the minimum supported Unity version to 2021.3 LTS.
+
+v1.0.1
+	- Removed the TG_NHP_TextureAtlas_01 scriptable object, used by Palette Modifier, from the Textures Folder. 
+	- Added a new Unity package that contains the Texture Grid scriptable object for the NHP_TextureAtlas_01 texture.
+
+v1.0.0
+	- Initial Release

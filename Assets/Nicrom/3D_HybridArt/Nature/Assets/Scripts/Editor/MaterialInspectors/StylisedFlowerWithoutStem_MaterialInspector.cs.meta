@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ab0beeb7dfecf4c4587f6fabe0e61072
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Scripts/Editor/MaterialInspectors/StylisedFlowerWithoutStem_MaterialInspector.cs
+  uploadId: 763345

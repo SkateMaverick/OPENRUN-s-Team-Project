@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: NHP_Skybox_Day
+  m_Shader: {fileID: 4800000, guid: c1cdfdb85f418f34489509ad08a6f06f, type: 3}
+  m_ShaderKeywords: _ENABLEFOG_ON
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _ColorBlendEnd: 0.28
+    - _ColorBlendStart: 0
+    - _EnableFog: 1
+    - _FogHeight: 0.146
+    - _FogOpacity: 0.7
+    - _GroundColorBlend: -0.07
+    - _HorSSMax: 0
+    - _HorSSMin: -0.09
+    - _SSMax: 0.28
+    - _SSMin: 0
+    - __dirty: 0
+    m_Colors:
+    - _GroundColor: {r: 0.5785867, g: 0.60624903, b: 0.6226415, a: 1}
+    - _HorizonColor: {r: 0.56069773, g: 0.77582264, b: 0.8490566, a: 1}
+    - _SkyColor: {r: 0.30615878, g: 0.5349529, b: 0.754717, a: 1}

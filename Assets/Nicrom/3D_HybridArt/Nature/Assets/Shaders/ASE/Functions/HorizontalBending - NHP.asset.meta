@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0b16e2546645f904a949bfd32be36037
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 181109
+  packageName: Nature - Hybrid Pack
+  packageVersion: 1.1.4
+  assetPath: Assets/Nicrom/3D_HybridArt/Nature/Assets/Shaders/ASE/Functions/HorizontalBending
+    - NHP.asset
+  uploadId: 763345
