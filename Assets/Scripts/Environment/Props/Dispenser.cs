@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Dispenser : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class Dispenser : MonoBehaviour
     [SerializeField] private float projectileSpeed = 20;
     // 디스펜서가 투사체를 쏘는 간격
     [SerializeField] private float fireRate = 0.75f;
+    
+    [SerializeField] private AudioClip shotAClip;
     
     // 현재 경과 시간
     private float _currentRate = 0f;
@@ -31,6 +34,12 @@ public class Dispenser : MonoBehaviour
         if (Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation).TryGetComponent<IProjectile>(out IProjectile launchable))
         {
             launchable.Launch(projectileSpeed);
+        }
+        
+        // shotAudio가 할당되어 있는 디스펜서만 오디오 출력
+        if (shotAClip != null)
+        {
+            AudioManager.Instance.PlaySFX(shotAClip, 0.5f);
         }
     }
 }

@@ -11,8 +11,13 @@ public class PlayerMovement : MonoBehaviour, IControllable
     // 넉다운 등으로 조작을 막아야 할 때 true. 켜져 있으면 이동과 회전을 모두 건너뜀
     public bool IsControlLocked { get; set; } // 추가
 
+    // 발소리 재생 간격 (초)
+    public float walkStepInterval = 0.5f;
+    public float runStepInterval = 0.33f;
+
     private Rigidbody _rigidbody;
     private float _turnSmoothVelocity;
+    private float _stepTimer;
 
     private void Awake()
     {
@@ -21,7 +26,6 @@ public class PlayerMovement : MonoBehaviour, IControllable
 
     private void FixedUpdate()
     {
-
         // 더 강한 중력
         _rigidbody.AddForce(Physics.gravity * (extraGravity - 1f), ForceMode.Acceleration);
     }
@@ -51,6 +55,22 @@ public class PlayerMovement : MonoBehaviour, IControllable
 
         Move(moveDirection, moveSpeed);
         Rotate(moveDirection);
+
+        // 현재 맵에 따라 걸음 오디오 출력
+        if (moveInput != Vector2.zero)
+        {
+            _stepTimer -= Time.fixedDeltaTime;
+            if (_stepTimer <= 0f)
+            {
+                AudioManager.Instance.PlaySFX(isSprint ? SceneInteractionAudio.Instance.runFootStep : SceneInteractionAudio.Instance.walkFootStep);
+                _stepTimer = isSprint ? runStepInterval : walkStepInterval;
+            }
+        }
+        else
+        {
+            // 멈췄다가 다시 걸으면 바로 첫 발소리가 나도록 초기화
+            _stepTimer = 0f;
+        }
     }
 
     private void Move(Vector3 direction, float speed)

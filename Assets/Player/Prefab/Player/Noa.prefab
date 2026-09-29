@@ -1293,6 +1293,8 @@ MonoBehaviour:
   sprintMultiplier: 1.5
   turnInterpolationRatio: 10
   extraGravity: 2.5
+  walkStepInterval: 0.5
+  runStepInterval: 0.33
 --- !u!114 &7535186124400233922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1322,7 +1324,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7492256035021517845}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
@@ -1419,7 +1421,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7492256035021517845}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a867312821727684aa79cac15aeb51aa, type: 3}
   m_Name: 

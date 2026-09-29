@@ -33,6 +33,8 @@ public class StorySceneManager : MonoBehaviour
     [Header("Input")]
     [SerializeField] private float inputDelay = 0.2f;
 
+    [SerializeField] private AudioClip nextPageClip;
+
     // -1이면 아직 스토리 Element에 들어가기 전, 즉 인트로 화면
     private int currentPageIndex = -1;
     private float startTime;
@@ -54,6 +56,7 @@ public class StorySceneManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space))
         {
+            if (nextPageClip != null) AudioManager.Instance.PlaySFX(nextPageClip);
             NextPage();
         }
     }

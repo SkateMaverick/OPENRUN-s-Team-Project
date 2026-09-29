@@ -42,7 +42,8 @@ public class PlayerHealth : LivingEntity
         
         if (hitSound != null)
         {
-            AudioSource.PlayClipAtPoint(hitSound, transform.position);
+            //AudioSource.PlayClipAtPoint(hitSound, transform.position);
+            AudioManager.Instance.PlaySFX(hitSound);
         }
     }
 
