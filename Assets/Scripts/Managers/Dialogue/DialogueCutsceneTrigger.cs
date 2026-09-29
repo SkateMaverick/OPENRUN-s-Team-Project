@@ -61,7 +61,7 @@ public class DialogueCutsceneTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") || other.GetComponentInParent<CharacterController>() != null || other.name.Contains("Noa") || other.name.Contains("Que"))
+        if (IsPlayer(other))
         {
             _playerInZone = true;
             if (triggerOnPlayerEnter && !_hasTriggered)
@@ -71,12 +71,31 @@ public class DialogueCutsceneTrigger : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (triggerOnPlayerEnter && !_hasTriggered && IsPlayer(other))
+        {
+            _playerInZone = true;
+            TriggerDialogue();
+        }
+    }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player") || other.GetComponentInParent<CharacterController>() != null || other.name.Contains("Noa") || other.name.Contains("Que"))
+        if (IsPlayer(other))
         {
             _playerInZone = false;
         }
+    }
+
+    private bool IsPlayer(Collider other)
+    {
+        if (other == null) return false;
+        if (other.CompareTag("Player")) return true;
+        if (other.transform.root != null && other.transform.root.CompareTag("Player")) return true;
+        if (other.GetComponentInParent<CharacterController>() != null) return true;
+        if (other.name.Contains("Noa") || other.name.Contains("Que")) return true;
+        return false;
     }
 
     public void TriggerDialogue()

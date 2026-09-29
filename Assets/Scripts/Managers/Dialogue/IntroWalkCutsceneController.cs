@@ -106,7 +106,7 @@ public class IntroWalkCutsceneController : MonoBehaviour
         if (playOnStart)
         {
             // Immediately disable player control if cutscene will play
-            if (!CheckIsDungeonReturn() && !HasPlayedFirstIntro)
+            if (CheckIsDungeonReturn() || !HasPlayedFirstIntro)
             {
                 if (_playerController != null)
                 {
@@ -144,7 +144,7 @@ public class IntroWalkCutsceneController : MonoBehaviour
         }
     }
 
-    private bool CheckIsDungeonReturn()
+    public bool CheckIsDungeonReturn()
     {
         // 1. CrystalPickup acquired flag
         if (CrystalPickup.IsCrystalAcquired) return true;
@@ -475,6 +475,33 @@ public class IntroWalkCutsceneController : MonoBehaviour
 
     private void OnDialogueComplete()
     {
+        bool isDungeonReturn = CheckIsDungeonReturn();
+        Debug.Log("[IntroWalkCutsceneController] OnDialogueComplete! isDungeonReturn=" + isDungeonReturn);
+
+        if (isDungeonReturn)
+        {
+            // Keep gameplay UI hidden during ending
+            SetGameplayUIVisibility(false);
+
+            // Returning from Dungeon 4 clear: Fade to black and show 'Chapter 2 에서 계속...'
+            var card = ChapterTitleCardUI.Instance;
+            if (card == null)
+            {
+                card = Object.FindFirstObjectByType<ChapterTitleCardUI>(FindObjectsInactive.Include);
+            }
+
+            if (card != null)
+            {
+                Debug.Log("[IntroWalkCutsceneController] Calling PlayBlackFadeEnding on " + card.name);
+                card.PlayBlackFadeEnding("Chapter 2 에서 계속...");
+            }
+            else
+            {
+                Debug.LogError("[IntroWalkCutsceneController] ChapterTitleCardUI not found!");
+            }
+            return;
+        }
+
         _isCutsceneActive = false;
 
         // Restore collision between characters
@@ -500,7 +527,7 @@ public class IntroWalkCutsceneController : MonoBehaviour
 
         onCutsceneComplete?.Invoke();
 
-        if (!CheckIsDungeonReturn() && ChapterTitleCardUI.Instance != null)
+        if (ChapterTitleCardUI.Instance != null)
         {
             ChapterTitleCardUI.Instance.PlayChapterIntro();
         }

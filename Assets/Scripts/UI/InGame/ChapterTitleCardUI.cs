@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 #if ENABLE_INPUT_SYSTEM
@@ -12,7 +13,19 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class ChapterTitleCardUI : MonoBehaviour
 {
-    public static ChapterTitleCardUI Instance { get; private set; }
+    private static ChapterTitleCardUI _instance;
+    public static ChapterTitleCardUI Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = Object.FindFirstObjectByType<ChapterTitleCardUI>(FindObjectsInactive.Include);
+            }
+            return _instance;
+        }
+        private set => _instance = value;
+    }
 
     [Header("UI References")]
     [SerializeField] private CanvasGroup canvasGroup;
@@ -54,8 +67,18 @@ public class ChapterTitleCardUI : MonoBehaviour
     [SerializeField] private Key debugKey = Key.F7;
 #endif
 
+    [Header("Chapter Ending Black Screen")]
+    [SerializeField] private Image blackOverlay;
+    [SerializeField] private TextMeshProUGUI endingText;
+
+    [Header("Main Menu Transition")]
+    [SerializeField] private string homeSceneName = "Menu";
+    [SerializeField] private string loadingSceneName = "LoadingScene";
+    [SerializeField] private bool useLoadingScene = true;
+
     private Coroutine _playCoroutine;
     private bool _hasTriggeredOnFirstIntro = false;
+    private bool _isEndingActive = false;
 
     private void Awake()
     {
@@ -110,6 +133,9 @@ public class ChapterTitleCardUI : MonoBehaviour
 
     private void Update()
     {
+        if (_isEndingActive)
+            return;
+
         if (enableDebugKey)
         {
             bool pressed = false;
@@ -137,7 +163,8 @@ public class ChapterTitleCardUI : MonoBehaviour
 
     public void OnIntroCutsceneComplete()
     {
-        if (_hasTriggeredOnFirstIntro) return;
+        if (_hasTriggeredOnFirstIntro || _isEndingActive) return;
+        if (IntroWalkCutsceneController.Instance != null && IntroWalkCutsceneController.Instance.CheckIsDungeonReturn()) return;
         _hasTriggeredOnFirstIntro = true;
 
         PlayChapterIntro();
@@ -145,11 +172,14 @@ public class ChapterTitleCardUI : MonoBehaviour
 
     public void PlayChapterIntro()
     {
+        if (_isEndingActive) return;
         PlayTitle(defaultChapter, defaultSubtitle, displayDuration);
     }
 
     public void PlayTitle(string chapter, string subtitle, float duration = 3.0f)
     {
+        if (_isEndingActive) return;
+
         if (_playCoroutine != null)
         {
             StopCoroutine(_playCoroutine);
@@ -254,5 +284,181 @@ public class ChapterTitleCardUI : MonoBehaviour
         }
 
         _playCoroutine = null;
+    }
+
+    /// <summary>
+    /// Fades the screen completely to black, then displays the ending text (e.g. 'Chapter 2 에서 계속...').
+    /// Screen stays black and waits for a Left Click to return to the Main Menu.
+    /// </summary>
+    public void PlayBlackFadeEnding(string text = "Chapter 2 에서 계속...", System.Action onComplete = null)
+    {
+        Debug.Log("[ChapterTitleCardUI] PlayBlackFadeEnding called with text: " + text);
+        _isEndingActive = true;
+
+        if (_playCoroutine != null)
+        {
+            StopCoroutine(_playCoroutine);
+        }
+
+        _playCoroutine = StartCoroutine(BlackFadeEndingRoutine(text, onComplete));
+    }
+
+    private IEnumerator BlackFadeEndingRoutine(string text, System.Action onComplete)
+    {
+        Debug.Log("[ChapterTitleCardUI] BlackFadeEndingRoutine started!");
+        _isEndingActive = true;
+
+        // Bring to front in canvas hierarchy so nothing covers it
+        transform.SetAsLastSibling();
+
+        // 1. Hide the normal chapter title card contents
+        if (contentTransform != null)
+        {
+            contentTransform.gameObject.SetActive(false);
+        }
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
+
+        // 2. Ensure black overlay and ending text are present and initialized
+        if (blackOverlay == null)
+        {
+            var overlayGo = new GameObject("BlackOverlay");
+            overlayGo.transform.SetParent(transform, false);
+            overlayGo.transform.SetAsFirstSibling();
+            var rt = overlayGo.AddComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            blackOverlay = overlayGo.AddComponent<Image>();
+            blackOverlay.color = new Color(0f, 0f, 0f, 0f);
+            blackOverlay.raycastTarget = true;
+        }
+
+        if (endingText == null)
+        {
+            var textGo = new GameObject("EndingText");
+            textGo.transform.SetParent(transform, false);
+            var rt = textGo.AddComponent<RectTransform>();
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+
+            endingText = textGo.AddComponent<TextMeshProUGUI>();
+            if (subtitleText != null)
+            {
+                endingText.font = subtitleText.font;
+            }
+            endingText.fontSize = 38;
+            endingText.alignment = TextAlignmentOptions.Center;
+            endingText.color = new Color(1f, 1f, 1f, 0f);
+            endingText.raycastTarget = false;
+        }
+
+        blackOverlay.gameObject.SetActive(true);
+        endingText.gameObject.SetActive(true);
+        endingText.text = text;
+
+        // Set initial state
+        blackOverlay.color = new Color(0f, 0f, 0f, 0f);
+        endingText.color = new Color(0.95f, 0.95f, 0.96f, 0f);
+
+        // 3. Fade screen to black
+        float fadeToBlackDuration = 1.5f;
+        float elapsed = 0f;
+        while (elapsed < fadeToBlackDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / fadeToBlackDuration);
+            float alpha = Mathf.SmoothStep(0f, 1f, t);
+            blackOverlay.color = new Color(0f, 0f, 0f, alpha);
+            yield return null;
+        }
+        blackOverlay.color = Color.black;
+
+        // Brief delay in black
+        yield return new WaitForSecondsRealtime(0.4f);
+
+        // 4. Fade in the ending text
+        float textFadeInDuration = 1.2f;
+        elapsed = 0f;
+        while (elapsed < textFadeInDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float t = Mathf.Clamp01(elapsed / textFadeInDuration);
+            float alpha = Mathf.SmoothStep(0f, 1f, t);
+            endingText.color = new Color(0.95f, 0.95f, 0.96f, alpha);
+            yield return null;
+        }
+        endingText.color = new Color(0.95f, 0.95f, 0.96f, 1f);
+
+        // Ensure cursor is visible and free
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        onComplete?.Invoke();
+
+        // 5. Wait for Left Click (or Space/Enter) to return to main menu
+        // Small debounce delay so input from previous dialogue doesn't skip immediately
+        yield return new WaitForSecondsRealtime(0.25f);
+
+        while (!CheckLeftClickInput())
+        {
+            yield return null;
+        }
+
+        // 6. Transition to Main Menu
+        ReturnToMainMenu();
+    }
+
+    private bool CheckLeftClickInput()
+    {
+#if ENABLE_INPUT_SYSTEM
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+            return true;
+        if (Keyboard.current != null && (Keyboard.current.spaceKey.wasPressedThisFrame || Keyboard.current.enterKey.wasPressedThisFrame || Keyboard.current.numpadEnterKey.wasPressedThisFrame))
+            return true;
+#endif
+        try
+        {
+            if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
+                return true;
+        }
+        catch { }
+
+        return false;
+    }
+
+    public void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
+        // Reset gameplay flags for future playthroughs
+        IntroWalkCutsceneController.HasPlayedFirstIntro = false;
+        CrystalPickup.IsCrystalAcquired = false;
+
+        if (InventoryManager.Instance != null)
+        {
+            Destroy(InventoryManager.Instance.gameObject);
+        }
+
+        if (useLoadingScene && !string.IsNullOrEmpty(loadingSceneName))
+        {
+            SceneLoader.NextSceneName = homeSceneName;
+            SceneManager.LoadScene(loadingSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(homeSceneName);
+        }
     }
 }

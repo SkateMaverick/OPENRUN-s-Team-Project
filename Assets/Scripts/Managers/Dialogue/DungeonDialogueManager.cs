@@ -164,6 +164,14 @@ public class DungeonDialogueManager : MonoBehaviour
             yield return new WaitForSeconds(startDelay);
         }
 
+        // Wait until DialogueCutsceneManager is available
+        float timeout = 3.0f;
+        while (DialogueCutsceneManager.Instance == null && timeout > 0f)
+        {
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
+
         PlayDungeonDialogue();
     }
 

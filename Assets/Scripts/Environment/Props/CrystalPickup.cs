@@ -41,7 +41,9 @@ public class CrystalPickup : MonoBehaviour
 
     private void Awake()
     {
-        IsCrystalAcquired = false;
+        // Do not reset IsCrystalAcquired here as multiple scenes (e.g. SingleMain) contain CrystalPickup components
+        // which would wipe the acquired state when transitioning scenes.
+        // Static state is reset on game startup via ResetStaticState().
     }
 
     private void Start()

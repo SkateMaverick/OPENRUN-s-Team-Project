@@ -98,7 +98,7 @@ public class QuickPotionSlotUI : MonoBehaviour
             {
                 if (InventoryManager.Instance.GetItemCount(activePotion) == 0)
                 {
-                    InventoryManager.Instance.AddItem(activePotion, starterPotionAmount);
+                    InventoryManager.Instance.AddItem(activePotion, starterPotionAmount, false);
                 }
             }
         }

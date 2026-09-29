@@ -182,6 +182,7 @@ public class ItemPickup : MonoBehaviour
             else
             {
                 Debug.LogError($"[ItemPickup] InventoryManager.Instance is null! Could not add {itemData.itemName}");
+                ItemAcquisitionUI.Show(itemData, amount);
             }
         }
 

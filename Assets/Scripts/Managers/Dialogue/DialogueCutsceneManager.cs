@@ -121,6 +121,14 @@ public class DialogueCutsceneManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     private void Update()
     {
         // Debug test hotkey (F5 key to trigger test dialogue cutscene)

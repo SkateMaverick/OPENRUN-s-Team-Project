@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,10 +39,11 @@ public class InventoryManager : MonoBehaviour
     public List<InventorySlotData> slots = new List<InventorySlotData>();
 
     public event Action onInventoryChanged;
+    public event Action<ItemData, int> onItemAcquired;
 
     private void Awake()
     {
-        if (_instance == null)
+        if (_instance == null || _instance == this)
         {
             _instance = this;
             if (transform.parent != null)
@@ -51,7 +52,7 @@ public class InventoryManager : MonoBehaviour
             }
             DontDestroyOnLoad(gameObject);
         }
-        else if (_instance != this)
+        else
         {
             Destroy(gameObject);
             return;
@@ -134,12 +135,13 @@ public class InventoryManager : MonoBehaviour
         return true;
     }
 
-    public bool AddItem(ItemData item, int amount = 1)
+    public bool AddItem(ItemData item, int amount = 1, bool notify = true)
     {
         if (item == null || amount <= 0)
             return false;
 
         InitSlots();
+        int requestedAmount = amount;
 
         if (item.stackable)
         {
@@ -158,6 +160,11 @@ public class InventoryManager : MonoBehaviour
                     if (amount <= 0)
                     {
                         onInventoryChanged?.Invoke();
+                        if (notify)
+                        {
+                            ItemAcquisitionUI.Show(item, requestedAmount);
+                            onItemAcquired?.Invoke(item, requestedAmount);
+                        }
                         return true;
                     }
                 }
@@ -177,13 +184,24 @@ public class InventoryManager : MonoBehaviour
                 if (amount <= 0)
                 {
                     onInventoryChanged?.Invoke();
+                    if (notify)
+                    {
+                        ItemAcquisitionUI.Show(item, requestedAmount);
+                        onItemAcquired?.Invoke(item, requestedAmount);
+                    }
                     return true;
                 }
             }
         }
 
+        int actuallyAdded = requestedAmount - amount;
         onInventoryChanged?.Invoke();
+        if (actuallyAdded > 0 && notify)
+        {
+            ItemAcquisitionUI.Show(item, actuallyAdded);
+            onItemAcquired?.Invoke(item, actuallyAdded);
+        }
         Debug.Log("인벤토리가 가득 찼습니다.");
-        return false;
+        return actuallyAdded > 0;
     }
 }
