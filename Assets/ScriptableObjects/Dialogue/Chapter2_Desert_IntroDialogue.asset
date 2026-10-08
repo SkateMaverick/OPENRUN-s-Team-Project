@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 828d97c8aa6051b4bb7f2d1d306581bb, type: 3}
+  m_Name: Chapter2_Desert_IntroDialogue
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  sequenceTitle: Chapter 2 Desert Arrival
+  lines:
+  - speakerName: Noa
+    speakerColor: {r: 0.35, g: 0.75, b: 1, a: 1}
+    dialogueText: "\uC774\uACF3\uC740 \uC880 \uB354\uC6B4\uAC70 \uAC19\uC544"
+    voiceClip: {fileID: 0}
+    cameraFocus: {fileID: 0}
+  - speakerName: Que
+    speakerColor: {r: 1, g: 0.85, b: 0.35, a: 1}
+    dialogueText: "\uB9DE\uC544 \uBE68\uB9AC \uC218\uC815\uC744 \uCC3E\uC544\uC11C
+      \uB2E4\uB978\uACF3\uC73C\uB85C \uAC00\uC790"
+    voiceClip: {fileID: 0}
+    cameraFocus: {fileID: 0}

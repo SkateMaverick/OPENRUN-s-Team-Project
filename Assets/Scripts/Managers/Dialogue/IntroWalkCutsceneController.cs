@@ -32,6 +32,9 @@ public class IntroWalkCutsceneController : MonoBehaviour
     }
 
     [Header("Path Settings")]
+    [Tooltip("If false, cutscene skips the forward walk and immediately starts dialogue at the current position.")]
+    [SerializeField] private bool walkForwardToTarget = true;
+
     [Tooltip("Center X position of the road.")]
     [SerializeField] private float pathCenterX = 0.40f;
 
@@ -389,31 +392,47 @@ public class IntroWalkCutsceneController : MonoBehaviour
         SetCharactersCollisionIgnored(true);
 
         // Position characters at starting positions
-        if (que != null)
+        if (walkForwardToTarget)
         {
-            float groundY = GetGroundY(pathCenterX, startZQue, que.position.y);
-            Vector3 startPos = new Vector3(pathCenterX, groundY, startZQue);
-            que.position = startPos;
-            que.rotation = Quaternion.LookRotation(Vector3.forward);
+            if (que != null)
+            {
+                float groundY = GetGroundY(pathCenterX, startZQue, que.position.y);
+                Vector3 startPos = new Vector3(pathCenterX, groundY, startZQue);
+                que.position = startPos;
+                que.rotation = Quaternion.LookRotation(Vector3.forward);
+                if (_queRb != null)
+                {
+                    _queRb.position = startPos;
+                    _queRb.rotation = Quaternion.LookRotation(Vector3.forward);
+                    _queRb.linearVelocity = Vector3.zero;
+                    _queRb.angularVelocity = Vector3.zero;
+                }
+            }
+
+            if (noa != null)
+            {
+                float groundY = GetGroundY(pathCenterX, startZNoa, noa.position.y);
+                Vector3 startPos = new Vector3(pathCenterX, groundY, startZNoa);
+                noa.position = startPos;
+                noa.rotation = Quaternion.LookRotation(Vector3.forward);
+                if (_noaRb != null)
+                {
+                    _noaRb.position = startPos;
+                    _noaRb.rotation = Quaternion.LookRotation(Vector3.forward);
+                    _noaRb.linearVelocity = Vector3.zero;
+                    _noaRb.angularVelocity = Vector3.zero;
+                }
+            }
+        }
+        else
+        {
             if (_queRb != null)
             {
-                _queRb.position = startPos;
-                _queRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _queRb.linearVelocity = Vector3.zero;
                 _queRb.angularVelocity = Vector3.zero;
             }
-        }
-
-        if (noa != null)
-        {
-            float groundY = GetGroundY(pathCenterX, startZNoa, noa.position.y);
-            Vector3 startPos = new Vector3(pathCenterX, groundY, startZNoa);
-            noa.position = startPos;
-            noa.rotation = Quaternion.LookRotation(Vector3.forward);
             if (_noaRb != null)
             {
-                _noaRb.position = startPos;
-                _noaRb.rotation = Quaternion.LookRotation(Vector3.forward);
                 _noaRb.linearVelocity = Vector3.zero;
                 _noaRb.angularVelocity = Vector3.zero;
             }
@@ -433,6 +452,12 @@ public class IntroWalkCutsceneController : MonoBehaviour
         }
 
         onCutsceneStart?.Invoke();
+
+        if (!walkForwardToTarget)
+        {
+            _hasArrived = true;
+            StartCoroutine(ArrivalRoutine());
+        }
     }
 
     private IEnumerator ArrivalRoutine()

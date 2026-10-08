@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: bd44746e10b2b50448259c401186ab6a
+timeCreated: 1464031638
+licenseType: Store
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 106709
+  packageName: Free Low Poly Desert Pack
+  packageVersion: 1.0
+  assetPath: Assets/Free Low Poly Desert Pack/Materials/Shaders/Water_Low_Poly_Basic.shader
+  uploadId: 748341
