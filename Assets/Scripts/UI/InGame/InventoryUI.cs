@@ -44,11 +44,6 @@ public class InventoryUI : MonoBehaviour
         {
             UIStateManager.Instance.CloseUI(UI_KEY);
         }
-        else
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        }
     }
 
     private void OnDestroy()

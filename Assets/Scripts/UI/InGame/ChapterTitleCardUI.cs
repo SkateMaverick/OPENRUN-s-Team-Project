@@ -405,12 +405,15 @@ public class ChapterTitleCardUI : MonoBehaviour
 
         onComplete?.Invoke();
 
-        // 5. Wait for Left Click (or Space/Enter) to return to main menu
+        // 5. Wait for Left Click (or Space/Enter) or auto timeout (3.5s) to return to main menu
         // Small debounce delay so input from previous dialogue doesn't skip immediately
         yield return new WaitForSecondsRealtime(0.25f);
 
-        while (!CheckLeftClickInput())
+        float autoReturnTimeout = 3.5f;
+        float waitElapsed = 0f;
+        while (!CheckLeftClickInput() && waitElapsed < autoReturnTimeout)
         {
+            waitElapsed += Time.unscaledDeltaTime;
             yield return null;
         }
 
@@ -439,17 +442,23 @@ public class ChapterTitleCardUI : MonoBehaviour
     public void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
-        Cursor.visible = true;
-        Cursor.lockState = CursorLockMode.None;
 
         // Reset gameplay flags for future playthroughs
         IntroWalkCutsceneController.HasPlayedFirstIntro = false;
         CrystalPickup.IsCrystalAcquired = false;
 
+        if (UIStateManager.Instance != null)
+        {
+            UIStateManager.Instance.CloseUI("CutsceneUI");
+        }
+
         if (InventoryManager.Instance != null)
         {
             Destroy(InventoryManager.Instance.gameObject);
         }
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         if (useLoadingScene && !string.IsNullOrEmpty(loadingSceneName))
         {

@@ -23,6 +23,10 @@ public class LoadingManager : MonoBehaviour
 
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1f;
+
         SetRandomBackground();
 
         string nextScene = SceneLoader.NextSceneName;

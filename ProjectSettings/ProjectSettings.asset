@@ -66,6 +66,9 @@ PlayerSettings:
   useOSAutorotation: 1
   use32BitDisplayBuffer: 1
   preserveFramebufferAlpha: 0
+  adjustIOSFPSUsingThermalState: 1
+  thermalStateSeriousIOSFPS: 30
+  thermalStateCriticalIOSFPS: 15
   disableDepthAndStencilBuffers: 0
   androidStartInFullscreen: 1
   androidRenderOutsideSafeArea: 1
@@ -898,11 +901,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: d5569fb5-642d-49a8-8bf8-03fcd1f7d00e
+  cloudProjectId: 3d8838a0-e2c4-4a2b-88c9-ddeb9f1b6e87
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: OPENRUN-s-Team-Project
-  organizationId: avgn7410_unity
+  projectName: OPENRUN-s-Team-Project (1)
+  organizationId: tkrwpqqq1
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

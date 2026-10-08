@@ -11,6 +11,44 @@ public class SceneLoader : MonoBehaviour
     [SerializeField] private string singleMainSceneName = "SingleTest";
     [SerializeField] private string menuSceneName = "Menu";
 
+    private void Awake()
+    {
+        ApplyCursorForMenuOrLoading();
+    }
+
+    private void Start()
+    {
+        ApplyCursorForMenuOrLoading();
+    }
+
+    private void ApplyCursorForMenuOrLoading()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+        if (currentScene == menuSceneName || currentScene == loadingSceneName)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 1f;
+        }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    private static void RegisterSceneLoadedCursorHandler()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoadedCursorHandler;
+        SceneManager.sceneLoaded += OnSceneLoadedCursorHandler;
+    }
+
+    private static void OnSceneLoadedCursorHandler(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Menu" || scene.name == "LoadingScene")
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            Time.timeScale = 1f;
+        }
+    }
+
     public void LoadStoryScene()
     {
         LoadSceneWithLoading(storySceneName);
@@ -23,6 +61,9 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadMenu()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+        Time.timeScale = 1f;
         LoadSceneWithLoading(menuSceneName);
     }
 

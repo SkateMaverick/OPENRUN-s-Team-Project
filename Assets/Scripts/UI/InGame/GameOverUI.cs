@@ -224,11 +224,9 @@ public class GameOverUI : MonoBehaviour
         {
             UIStateManager.Instance.CloseUI(UI_KEY);
         }
-        else
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-        }
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         if (useLoadingScene && !string.IsNullOrEmpty(loadingSceneName))
         {

@@ -322,6 +322,9 @@ public class PauseUI : MonoBehaviour
             UIStateManager.Instance.CloseUI(UI_KEY);
         }
 
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
         IsPaused = false;
 
         if (useLoadingScene && !string.IsNullOrEmpty(loadingSceneName))
