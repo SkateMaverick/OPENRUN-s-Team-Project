@@ -1,20 +1,15 @@
+// 52aad02 커밋 기준 PlayerShooter 백업 (발사 연출·발소리 변경 전)
 using UnityEngine;
 using Player.InputActions;
 
-public class PlayerShooter : BaseShooter
+public class LegacyPlayerShooter : BaseShooter
 {
     [SerializeField] private float fireDelay = 1f; // 다음 발사까지의 대기 시간
-    [SerializeField] private float windupTime = 0.1f; // 우클릭부터 실제 발사까지의 지연
-    [SerializeField] private AudioClip fireClip;
     private float _lastFireTime = 0f; // 마지막으로 발사한 시간을 기억할 변수
-    private PlayerFaceExpression _face;
-    private PlayerShootBodyMotion _bodyMotion;
-
+    
     protected override void Awake()
     {
         base.Awake();
-        _face = GetComponent<PlayerFaceExpression>();
-        _bodyMotion = GetComponent<PlayerShootBodyMotion>();
     }
 
     private void Update()
@@ -22,16 +17,14 @@ public class PlayerShooter : BaseShooter
         // 오른쪽 마우스 클릭이 들어오고 발사 가능 상태이며 발사 대기시간이 지났다면
         if (CanFire() && Time.time >= _lastFireTime + fireDelay)
         {
-            // 실제 발사는 windupTime 뒤라서, 미리 기록하지 않으면 매 프레임 연출이 재시작돼 발사가 안 됨
-            _lastFireTime = Time.time;
-            _face.PlayShootSequence(Fire, windupTime);
-            _bodyMotion.Play(windupTime);
+            // 투사체 발사
+            Fire();
         }
     }
 
     private bool CanFire()
     {
-        if (PlayerInputReader.Instance == null || !PlayerInputReader.Instance.FireInput || PlayerInputReader.Instance.SprintInput)
+        if (PlayerInputReader.Instance == null || !PlayerInputReader.Instance.FireInput)
         {
             return false;
         }
@@ -71,7 +64,5 @@ public class PlayerShooter : BaseShooter
         {
             launchable.Launch(projectileSpeed);
         }
-
-        AudioManager.Instance.PlaySFX(fireClip);
     }
 }

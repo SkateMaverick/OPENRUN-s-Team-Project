@@ -56,13 +56,14 @@ public class PlayerMovement : MonoBehaviour, IControllable
         Move(moveDirection, moveSpeed);
         Rotate(moveDirection);
 
-        // 현재 맵에 따라 걸음 오디오 출력
+        //현재 맵에 따라 걸음 오디오 출력
         if (moveInput != Vector2.zero)
         {
             _stepTimer -= Time.fixedDeltaTime;
             if (_stepTimer <= 0f)
             {
-                AudioManager.Instance.PlaySFX(isSprint ? SceneInteractionAudio.Instance.runFootStep : SceneInteractionAudio.Instance.walkFootStep);
+                var sfx = SceneInteractionAudio.Instance;
+                AudioManager.Instance.PlaySFX(isSprint ? sfx.runFootstep[Random.Range(0, sfx.runFootstep.Length)] : sfx.walkFootstep[Random.Range(0, sfx.walkFootstep.Length)]);
                 _stepTimer = isSprint ? runStepInterval : walkStepInterval;
             }
         }

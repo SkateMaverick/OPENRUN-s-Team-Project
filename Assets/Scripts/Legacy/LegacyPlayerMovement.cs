@@ -1,137 +1,99 @@
+// 52aad02 커밋 기준 PlayerMovement 백업 (발사 연출·발소리 변경 전)
 using UnityEngine;
-using Player.InputActions;
 
-namespace Player.Script
+public class LegacyPlayerMovement : MonoBehaviour, IControllable
 {
-    public class LegacyPlayerMovement : MonoBehaviour
+    public Camera followCam;
+    public float baseSpeed = 8f;
+    public float sprintMultiplier = 1.5f;
+    public float turnInterpolationRatio = 10f;
+    public float extraGravity = 2.5f;
+
+    // 넉다운 등으로 조작을 막아야 할 때 true. 켜져 있으면 이동과 회전을 모두 건너뜀
+    public bool IsControlLocked { get; set; } // 추가
+
+    // 발소리 재생 간격 (초)
+    public float walkStepInterval = 0.5f;
+    public float runStepInterval = 0.33f;
+
+    private Rigidbody _rigidbody;
+    private float _turnSmoothVelocity;
+    private float _stepTimer;
+
+    private void Awake()
     {
-        public float moveSpeed = 4.0f;
-        private Vector3 _lastMoveDirection;
+        _rigidbody = GetComponent<Rigidbody>();
+    }
 
-        [Header("Ground Settings")]
-        public bool grounded = true;
-        public float groundCheckDistance = 0.2f;
+    private void FixedUpdate()
+    {
+        // 더 강한 중력
+        _rigidbody.AddForce(Physics.gravity * (extraGravity - 1f), ForceMode.Acceleration);
+    }
 
-        private Rigidbody _rb;
-        private Collider _col;
-        private Transform _mainCameraTransform;
-        public PlayerInputReader _playerInputReader; 
+    public void HandleCharacterControl(Vector2 moveInput, bool isSprint)
+    {
+        // 조작이 잠겨 있으면 속도와 회전을 덮어쓰지 않음 (밀려나는 힘이 사라지지 않도록)
+        if (IsControlLocked) return; // 추가
 
-        private float _inputH;
-        private float _inputV;
-        private bool _isSprinting;
-        private float _camEulerY;
+        // 달리는 상태라면 달리기 속도를 사용
+        float moveSpeed = isSprint ? baseSpeed * sprintMultiplier : baseSpeed;
 
-        private void Start()
+        // 카메라의 정면과 오른쪽의 방향 벡터
+        Vector3 camForward = followCam.transform.forward;
+        Vector3 camRight = followCam.transform.right;
+
+        // 방향이 위아래를 쳐다보진 않도록 조절
+        camForward.y = 0;
+        camRight.y = 0;
+
+        // 조절로 인해 벡터의 길이가 1보다 작아질 수 있기 때문에 정규화
+        camForward.Normalize();
+        camRight.Normalize();
+
+        // 실제 이동 방향
+        Vector3 moveDirection = (camForward * moveInput.y) + (camRight * moveInput.x);
+
+        Move(moveDirection, moveSpeed);
+        Rotate(moveDirection);
+
+        // 현재 맵에 따라 걸음 오디오 출력
+        if (moveInput != Vector2.zero)
         {
-            _rb = GetComponent<Rigidbody>();
-            _col = GetComponent<Collider>(); 
-
-            // 물리 엔진 회전 제어 및 자체 중력 활성화
-            _rb.freezeRotation = true;
-            _rb.useGravity = true; 
-
-            if (Camera.main != null)
+            _stepTimer -= Time.fixedDeltaTime;
+            if (_stepTimer <= 0f)
             {
-                _mainCameraTransform = Camera.main.transform;
-            }
-
-            _playerInputReader = GetComponent<PlayerInputReader>();
-        }
-
-        private void Update()
-        {
-            // 이동 및 카메라 입력값 캐싱
-            if (_playerInputReader != null)
-            {
-                _inputH = _playerInputReader.MoveInput.x;
-                _inputV = _playerInputReader.MoveInput.y;
-                //_isSprinting = _playerInputReader.SprintInput && !_playerInputReader.AimInput;
-            }
-        
-            if (_mainCameraTransform != null)
-            {
-                _camEulerY = _mainCameraTransform.eulerAngles.y;
+                AudioManager.Instance.PlaySFX(isSprint ? LegacySceneInteractionAudio.Instance.runFootStep : LegacySceneInteractionAudio.Instance.walkFootStep);
+                _stepTimer = isSprint ? runStepInterval : walkStepInterval;
             }
         }
-
-        private void FixedUpdate()
+        else
         {
-            GroundedCheck();
-            //Move();
+            // 멈췄다가 다시 걸으면 바로 첫 발소리가 나도록 초기화
+            _stepTimer = 0f;
         }
+    }
 
-        // 추후 확인 필요
-        public void Move()
-        {
-            Vector3 inputVector = new Vector3(_inputH, 0f, _inputV).normalized;
-            Quaternion cameraRotation = Quaternion.Euler(0, _camEulerY, 0);
+    private void Move(Vector3 direction, float speed)
+    {
+        // 목표 속도
+        Vector3 targetVelocity = direction * speed;
+        // 현재 속도
+        Vector3 currentVelocity = new Vector3(_rigidbody.linearVelocity.x, 0f, _rigidbody.linearVelocity.z);
+        // 현재 속도에서 목표 속도까지의 차이 (= 목표 속도 - 현재 속도)
+        Vector3 velocityDifference = targetVelocity - currentVelocity;
+        // 차이만큼 현재 속도에 더함 (현재 속도가 5고, 목표 속도가 3이면 3-5=-2 -> 5+(-2)=3)
+        _rigidbody.AddForce(velocityDifference, ForceMode.VelocityChange);
+    }
 
-            _lastMoveDirection = cameraRotation * inputVector;
-    
-            // 경사면 이동 방향 보정
-            if (GetGroundHit(_col.bounds.center, Vector3.down, _col.bounds.extents.y + 1.0f, out RaycastHit hitInfo))
-            {
-                if (grounded)
-                {
-                    _lastMoveDirection = Vector3.ProjectOnPlane(_lastMoveDirection, hitInfo.normal).normalized;
-                }
-            }
+    private void Rotate(Vector3 direction)
+    {
+        // 'Look rotation viewing vector is zero' 로그 방지용
+        if (direction == Vector3.zero) return;
 
-            float finalHorizontalSpeed = 0f;
-
-            if (_inputH != 0 || _inputV != 0)
-            {
-                finalHorizontalSpeed = _isSprinting ? moveSpeed * 2.0f : moveSpeed;
-            }
-    
-            // 수평 이동 벡터 계산 (경사면일 경우 y축 이동 방향도 포함되어 있음)
-            Vector3 finalVelocity = _lastMoveDirection * finalHorizontalSpeed;
-    
-            // 땅에 닿아있으면 경사면 방향(y축 포함)대로 이동하고, 공중이면 중력 영향 유지
-            if (grounded)
-            {
-                _rb.linearVelocity = finalVelocity;
-            }
-            else
-            {
-                _rb.linearVelocity = new Vector3(finalVelocity.x, _rb.linearVelocity.y, finalVelocity.z);
-            }
-
-            Quaternion targetRotation = Quaternion.Euler(0, _camEulerY, 0);
-            _rb.MoveRotation(targetRotation);
-        }
-
-        private void GroundedCheck()
-        {
-            // 콜라이더 중앙을 기준으로 바닥 체크 수행
-            Vector3 origin = _col.bounds.center;
-            float distance = _col.bounds.extents.y + groundCheckDistance;
-            grounded = GetGroundHit(origin, Vector3.down, distance, out _);
-        }
-
-        private bool GetGroundHit(Vector3 origin, Vector3 dir, float maxDist, out RaycastHit closestHit)
-        {
-            closestHit = new RaycastHit();
-            bool hitFound = false;
-            float minDistance = maxDist;
-
-            RaycastHit[] hits = Physics.RaycastAll(origin, dir, maxDist, Physics.AllLayers, QueryTriggerInteraction.Ignore);
-            
-            foreach (RaycastHit hit in hits)
-            {
-                // 플레이어 자신(루트 오브젝트)과의 충돌 무시
-                if (hit.transform.root == transform.root) continue;
-
-                if (hit.distance < minDistance)
-                {
-                    minDistance = hit.distance;
-                    closestHit = hit;
-                    hitFound = true;
-                }
-            }
-
-            return hitFound;
-        }
+        // 들어온 방향을 가리키는 쿼터니언
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        // 구한 쿼터니언으로 회전
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * turnInterpolationRatio);
     }
 }

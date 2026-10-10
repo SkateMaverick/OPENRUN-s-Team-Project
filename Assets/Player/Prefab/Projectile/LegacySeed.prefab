@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -8260845087990193632}
   - component: {fileID: -6775764350814370223}
   m_Layer: 9
-  m_Name: Seed
+  m_Name: LegacySeed
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
